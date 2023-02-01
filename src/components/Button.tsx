@@ -10,7 +10,7 @@ export default function Button({ icon: Icon, text, className, ...props }: Props)
 	const textClasses = `hidden group-hover/button:block ${text ? "px-6" : ""}`;
 
 	return (
-		<button className={btnClasses} {...props}>
+		<button className={btnClasses} {...props} type="button">
 			<Icon />
 			<div className={textClasses}>{text}</div>
 		</button>

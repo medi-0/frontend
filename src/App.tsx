@@ -1,10 +1,11 @@
 import MainProvider from "./providers";
 import DocProvisionerPage from "./pages/doc-provisioner";
-import Modal from "./pages/doc-provisioner/components/DocModal";
+import { Modal } from "./pages/doc-provisioner/components";
+// import { Modal } from "./pages/fact-prover/components";
 
 function App() {
 	return (
-		<div className="App font-sans">
+		<div className="App font-sans h-80">
 			<DocProvisionerPage />
 			<Modal />
 		</div>
