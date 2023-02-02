@@ -22,7 +22,7 @@ export default function usePdfUploader() {
 
 		try {
 			const res = await axios.post<{ data: string }>(
-				"http://13.229.230.171/processpdf",
+				"https://medi0backend.spicybuilds.xyz/processpdf",
 				formData,
 				{
 					headers: {
