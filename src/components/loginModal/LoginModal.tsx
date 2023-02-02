@@ -20,6 +20,11 @@ import {
 } from "@chakra-ui/react";
 
 
+interface Result {
+  jsonrpc: string;
+  id: number;
+  result: string;
+}
 
 
 function Login() {
@@ -32,7 +37,40 @@ function Login() {
 
 
   // })
-  // const mediContract: string = '0xf86EaD782f5e14EA54e4E34cB8b21DFD924573dd' 
+  
+  // const { data, isError, isLoading } = useContractRead(
+  //   {
+  //     address: '0xf86EaD782f5e14EA54e4E34cB8b21DFD924573dd',
+  //     abi: ABI,
+  //     functionName: "HOSPITAL_ROLE",
+  //     args: []
+  //   }
+  // )
+  
+  const { data, isError, isLoading } = useContractRead(
+    {
+      address: '0xf86EaD782f5e14EA54e4E34cB8b21DFD924573dd',
+      abi: ABI,
+      functionName: "hospitals",
+      args: [
+        // this is a fake value 
+        '0x5B38Da6a701c568545dCfcB03FcB875f56beddC4'
+      ]
+    }
+  )
+
+  const data2 = data as Result;
+  console.log(`isLoading: ${isLoading}`)
+  console.log(`isError: ${isError}`)
+  if (data2) {
+    console.log(`data: ${data2.result}`)
+    console.log(`data: ${data2.id}`)
+    console.log(`data: ${data2.jsonrpc}`)
+  }
+  // console.log(`data: ${data2.result}`)
+  // console.log(`data: ${data2.id}`)
+  // console.log(`data: ${data2.jsonrpc}`)
+
   // const { data, isError, isLoading } = useContractRead(
   //   {
   //     addressOrName: mediContract,
