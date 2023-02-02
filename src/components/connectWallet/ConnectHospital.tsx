@@ -1,5 +1,9 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect, useMemo } from "react";
+import { useAccount, usePrepareContractWrite } from "wagmi";
+import fs from 'fs'
+import path from "path";
+import { useNavigate } from "react-router-dom";
 
 
 // type LoginName = {
@@ -18,8 +22,9 @@ import { useState, useContext } from "react";
 // }
 
 
-
 function ConnectHospital({}) {
+
+  const { address, connector, isConnected } = useAccount();
 
 
   return (
@@ -60,6 +65,7 @@ function ConnectHospital({}) {
                       Connect as Hospital
                     </button>
                   );
+
                 }
 
                 if (chain.unsupported) {

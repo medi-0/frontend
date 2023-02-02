@@ -9,9 +9,8 @@ export default function Patient() {
 
   return (
     <div>
-      <Navbar />
       <h1>This is patient page</h1>
-      <p>{logIn ? <h1>you are logged in</h1> : <h1>NOT loged in</h1>}</p>
+      <p>{logIn ? <>you are logged in</> : <>NOT loged in</>}</p>
       {/* {context} */}
     </div>
   );

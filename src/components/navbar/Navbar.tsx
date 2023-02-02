@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAccount, useBalance } from "wagmi";
 import Login from "../loginModal/LoginModal";
 import { useNavigate } from "react-router-dom";
@@ -22,7 +22,13 @@ function Navbar() {
     navigate("/");
   }
 
- 
+
+  useEffect(() => {
+    if(isConnected === true) {
+      navigate('/hospital')
+    }
+  }, [isConnected]);
+  
 
 
   return (
@@ -34,7 +40,7 @@ function Navbar() {
         
         <button onClick = {handleVerify} className="m-[15px] text-lg font-bold text-[#396AEB] ">Verify</button>
 
-        {data ? (
+        {isConnected ? (
           <></>
         ) : (
           <>
@@ -42,7 +48,7 @@ function Navbar() {
           </>
         )}
 
-        {data ? (
+        {isConnected ? (
           <>
             {data?.symbol} {address}
           </>

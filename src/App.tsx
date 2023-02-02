@@ -7,6 +7,7 @@ import Verifier from "./pages/Verifier";
 import Hospital from "./pages/Hospital";
 import Patient from "./pages/Patient";
 import { createContext } from "react";
+import Navbar from "./components/navbar/Navbar";
 
 
 interface UserContextState {
@@ -42,6 +43,7 @@ function App() {
         
       <BrowserRouter>
         <main>
+          <Navbar/>
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="Verifier" element={<Verifier />} />

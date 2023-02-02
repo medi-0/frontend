@@ -15,12 +15,11 @@ export default function Hospital(){
 
     return (
         <div>
-            <Navbar />
             <h1>This is Hospital Page</h1>
             <br />
             <button>hospital login</button>
             <br />
-            <p>{logIn ? <h1>you are logged in</h1> : <h1>NOT loged in</h1>}</p>
+            <p>{logIn ? <>you are logged in</> : <>NOT loged in</>}</p>
             <button onClick={handleOnClick}>State</button>
             <Patient/>
             
