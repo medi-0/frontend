@@ -9,9 +9,15 @@ import {
   StackDivider,
   Box,
   Text,
-  Button,
   Center,
+  Accordion,
+  AccordionPanel,
+  AccordionItem,
+  AccordionIcon,
+  AccordionButton,
+  useDisclosure,
 } from "@chakra-ui/react";
+
 import { useAccount } from "wagmi";
 
 // import { FileHasherProps } from "../../file-hasher-types";
@@ -34,9 +40,13 @@ export interface JsonFileContentType {
 export function VerifyFormPanel() {
   const { address, isConnected, connector } = useAccount();
   const toast = useToast();
+  const { isOpen, onToggle } = useDisclosure();
 
   const styles = useMultiStyleConfig("Button", { variant: "outline" });
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const [show, setShow] = React.useState(false);
+  const handleToggle = () => setShow(!show);
 
   const [jsonFileContent, setJsonFileContent] =
     React.useState<JsonFileContentType[]>();
@@ -103,6 +113,14 @@ export function VerifyFormPanel() {
 
       {jsonFileContent ? (
         jsonFileContent.map((file) => {
+          // print file contents
+          file.selectedRows.map((file1) => {
+            // console.log(file1.selectedKey);
+            // console.log(file1.selectedValue);
+            const proofStr = file1.proof.toString().slice(0, 10) + "...";
+
+            console.log(`proof: ${proofStr}`);
+          });
           return (
             <>
               <Box mt="2" mb="2">
@@ -180,14 +198,34 @@ export function VerifyFormPanel() {
                                       {file1.selectedValue}
                                     </Text>
                                   </Box>
-
-                                  <Heading size="xs" textTransform="uppercase">
+                                  {/* <Heading size="xs" textTransform="uppercase">
                                     Proof
-                                  </Heading>
+                                  </Heading> */}
+                                  <Accordion allowToggle>
+                                    <AccordionItem>
+                                      <h2>
+                                        <AccordionButton>
+                                          <Box
+                                            as="span"
+                                            flex="1"
+                                            textAlign="left"
+                                          >
+                                            <Heading
+                                              size="xs"
+                                              textTransform="uppercase"
+                                            >
+                                              Generated Proof
+                                            </Heading>
+                                          </Box>
+                                          <AccordionIcon />
+                                        </AccordionButton>
+                                      </h2>
+                                      <AccordionPanel pb={4}>
+                                        {file1.proof.toString()}
+                                      </AccordionPanel>
+                                    </AccordionItem>
+                                  </Accordion>
                                 </div>
-                                {file1.proof.map((data) => {
-                                  return <>{data}</>;
-                                })}
                               </>
                             );
                           })}
