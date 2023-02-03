@@ -40,13 +40,11 @@ export interface JsonFileContentType {
 export function VerifyFormPanel() {
   const { address, isConnected, connector } = useAccount();
   const toast = useToast();
-  const { isOpen, onToggle } = useDisclosure();
 
   const styles = useMultiStyleConfig("Button", { variant: "outline" });
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [show, setShow] = React.useState(false);
-  const handleToggle = () => setShow(!show);
 
   const [jsonFileContent, setJsonFileContent] =
     React.useState<JsonFileContentType[]>();
