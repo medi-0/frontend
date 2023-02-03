@@ -7,23 +7,21 @@ interface MainModelContextState {
 	onClose: () => void;
 }
 
-export const MainModalContext = createContext<MainModelContextState>({
+export const ModalContext = createContext<MainModelContextState>({
 	isOpen: false,
 	onOpen: () => {},
 	onClose: () => {},
 });
 
-export function useMainModelContext() {
-	return useContext(MainModalContext);
+export function useMainModalContext() {
+	return useContext(ModalContext);
 }
 
-export const MainModelContextProvider: React.FC<PropsWithChildren> = function ({
-	children,
-}) {
+export const ModelContextProvider: React.FC<PropsWithChildren> = function ({ children }) {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	return (
-		<MainModalContext.Provider
+		<ModalContext.Provider
 			value={{
 				isOpen,
 				onOpen,
@@ -31,6 +29,6 @@ export const MainModelContextProvider: React.FC<PropsWithChildren> = function ({
 			}}
 		>
 			{children}
-		</MainModalContext.Provider>
+		</ModalContext.Provider>
 	);
 };

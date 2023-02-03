@@ -1,11 +1,17 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import { PropsWithChildren } from "react";
-import { MainModelContextProvider } from "./MainModalContext";
+import { GraphQLProvider } from "./GraphQLProvider";
+import { ModelContextProvider } from "./MainModalContext";
+import { WagmiProvider } from "./WagmiProvider";
 
 const MainProvider: React.FC<PropsWithChildren> = function ({ children }) {
 	return (
 		<ChakraProvider>
-			<MainModelContextProvider>{children}</MainModelContextProvider>
+			<GraphQLProvider>
+				<WagmiProvider>
+					<ModelContextProvider>{children}</ModelContextProvider>
+				</WagmiProvider>
+			</GraphQLProvider>
 		</ChakraProvider>
 	);
 };

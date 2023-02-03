@@ -9,7 +9,8 @@ module.exports = {
 	theme: {
 		extend: {
 			fontFamily: {
-				sans: ["Manrope", "sans-serif"],
+				sans: ["Inter", "sans-serif"],
+				mono: ["Space Mono", "monospace"],
 			},
 		},
 	},

@@ -3,84 +3,75 @@ import {
 	ModalOverlay,
 	ModalContent,
 	ModalHeader,
-	ModalFooter,
-	ModalBody,
 	ModalCloseButton,
-	Button,
+	Spinner,
 } from "@chakra-ui/react";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
+import { useDocFetchIpfs } from "../../../../lib/hooks/useDocFetchIpfs";
 import { Field } from "../../../../lib/utils";
-import { useMainModelContext } from "../../../../providers/MainModalContext";
+import { useMainModalContext } from "../../../../providers/MainModalContext";
+import { usePatientModal } from "../../PatientModalContext";
 import SelectableForm from "./SelectableForm";
 
-function Modal() {
-	const mainModal = useMainModelContext();
-
-	const handleFormSubmit = useCallback((data: Field[]) => {}, []);
+function ModalContainer() {
+	// const { close } = usePatientModal();
+	const mainModal = useMainModalContext();
 
 	return (
 		<ChakraModal isOpen={mainModal.isOpen} onClose={mainModal.onClose} isCentered>
 			<ModalOverlay />
-			<ModalContent
-				margin="2rem"
-				w="1000px"
-				minW="600px"
-				maxW="1000px"
-				minH="400px"
-				maxH="600px"
-				borderRadius="2xl"
-				display="flex"
-			>
-				<ModalHeader paddingBottom="0.5rem">Title</ModalHeader>
-				<ModalCloseButton />
-				<ModalBody className="flex flex-col  h-72" padding="1rem 1.2rem">
-					<div className="border border-zinc-400 rounded-md p-3 mb-6 ">
-						some text here
-					</div>
-
-					<SelectableForm
-						defaultFields={[
-							{
-								key: "key1",
-								value: "value1",
-							},
-							{
-								key: "key2",
-								value: "value2",
-							},
-							{
-								key: "key3",
-								value: "value3",
-							},
-							{
-								key: "key4",
-								value: "value4",
-							},
-							{
-								key: "key5",
-								value: "value5",
-							},
-						]}
-						onSubmit={handleFormSubmit}
-					/>
-				</ModalBody>
-
-				<ModalFooter justifyContent="center">
-					<Button
-						borderRadius="3xl"
-						paddingX="14"
-						className=""
-						colorScheme="blue"
-						mr={3}
-						// onClick={mainModal.onClose}
-						// onClick={() => console.log("fields", fields)}
-					>
-						Generate Proof
-					</Button>
-				</ModalFooter>
-			</ModalContent>
+			<Modal />
 		</ChakraModal>
 	);
 }
 
-export default Modal;
+function Modal() {
+	const {
+		state: { docCid },
+	} = usePatientModal();
+
+	// useEffect(() => {
+	// 	console.log("cid ", docCid);
+	// }, [docCid]);
+
+	const { docs, isLoading, isError, fetchFiles } = useDocFetchIpfs();
+
+	useEffect(() => {
+		if (!docCid) return;
+		fetchFiles(docCid);
+	}, [docCid]);
+
+	const handleFormSubmit = useCallback((data: Field[]) => {
+		console.log("generating proof for fields", data);
+	}, []);
+
+	return (
+		<ModalContent
+			margin="2rem"
+			w="1000px"
+			minW="600px"
+			maxW="1000px"
+			minH="400px"
+			maxH="600px"
+			borderRadius="2xl"
+			display="flex"
+		>
+			<ModalHeader paddingBottom="0.5rem">Title</ModalHeader>
+			<ModalCloseButton />
+
+			{isLoading ? (
+				<div className="flex-1 flex items-center justify-center">
+					<Spinner />
+				</div>
+			) : docs && docs[0] ? (
+				<SelectableForm doc={docs[0]} onSubmit={handleFormSubmit} />
+			) : isLoading ? (
+				<div>loading</div>
+			) : (
+				<div>no doc found</div>
+			)}
+		</ModalContent>
+	);
+}
+
+export default ModalContainer;

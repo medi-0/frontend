@@ -1,70 +1,105 @@
 import {
-	Modal as ChakraModal,
 	ModalOverlay,
 	ModalContent,
 	ModalHeader,
-	ModalFooter,
-	ModalBody,
 	ModalCloseButton,
-	Button,
+	Modal as ChakraModal,
 } from "@chakra-ui/react";
 import EditableForm from "./EditableForm";
-import usePdfUploader from "../../../../lib/hooks/useFileUploader";
-import { useMainModelContext } from "../../../../providers/MainModalContext";
-import { ModalStateProvider, useModalState } from "./ModalStateContext";
-import { Field, parseJSON, processText } from "../../../../lib/utils";
+import { useMainModalContext } from "../../../../providers/MainModalContext";
+import { Field, fieldsFromJSON } from "../../../../lib/utils";
 import { useCallback } from "react";
 import PdfUploadForm from "./PdfUploadForm";
+import { useState } from "react";
+import { useDocUploadIpfs } from "../../../../lib/hooks/useDocUploadIpfs";
+import { DocCommitment } from "./DocUploadIpfs";
+import { useDocCommitment } from "../../../../lib/hooks/useDocCommitment";
+import { Doc } from "../../../../lib/types";
 
-function Modal() {
-	const mainModal = useMainModelContext();
-	const { docFields, setDocFields } = useModalState();
+type ModalPhase = "UPLOAD" | "SUBMISSION" | "COMMITMENT";
 
-	const handlePdfUploadFormSubmit = useCallback(async function (text: string) {
-		console.log("pdf upload submit", text);
-		// const { respText } = await processText(text);
-		// setDocFields(parseJSON(respText));
-		setDocFields([]);
-	}, []);
-
-	const handleEditableFormSubmit = useCallback((data: Field[]) => {
-		console.log("editable form submit", data);
-	}, []);
+function ModalContainer() {
+	const mainModal = useMainModalContext();
 
 	return (
 		<ChakraModal isOpen={mainModal.isOpen} onClose={mainModal.onClose} isCentered>
 			<ModalOverlay />
-			<ModalContent
-				margin="2rem"
-				w="1000px"
-				minW="600px"
-				maxW="1000px"
-				minH="400px"
-				maxH="600px"
-				borderRadius="2xl"
-				display="flex"
-			>
-				<ModalHeader paddingBottom="0.5rem">Document Provisioning</ModalHeader>
-				<ModalCloseButton />
-				{docFields ? (
-					<EditableForm
-						defaultFields={docFields}
-						onSubmit={handleEditableFormSubmit}
-					/>
-				) : (
-					<PdfUploadForm onSubmit={handlePdfUploadFormSubmit} />
-				)}
-			</ModalContent>
+			<Modal />
 		</ChakraModal>
 	);
 }
 
-function ModalWithContext() {
+function Modal() {
+	const [fields, setFields] = useState<Field[]>([]);
+	const [phase, setPhase] = useState<ModalPhase>("UPLOAD");
+
+	const { upload, commitment } = useDocCommitment();
+	// const { upload, isLoading, cid, isError } = useDocUploadIpfs();
+
+	const handlePdfUploadFormSubmit = useCallback(async function (processedText: string) {
+		setFields(fieldsFromJSON(processedText));
+		setPhase("SUBMISSION");
+	}, []);
+
+	const handleDocSubmit = useCallback(
+		async (docName: string, patientAddress: string, fields: Field[]) => {
+			setPhase("COMMITMENT");
+
+			commitment.commit({
+				docName,
+				patientAddress,
+				hospitalName: "Hospital Banting",
+				hospitalAddress: "0x12415213132",
+				fields,
+			});
+		},
+		[]
+	);
+
 	return (
-		<ModalStateProvider>
-			<Modal />
-		</ModalStateProvider>
+		<ModalContent
+			margin="2rem"
+			minW="600px"
+			w="1000px"
+			maxW="1000px"
+			minH="170px"
+			maxH="1000px"
+			borderRadius="2xl"
+			display="flex"
+			paddingTop="2rem"
+			paddingX="1rem"
+		>
+			{/* <ModalHeader paddingBottom="0.5rem">Document Provisioning</ModalHeader> */}
+			<div className="absolute top-[-25px] right-[-25px] bg-white">
+				<ModalCloseButton
+					backgroundColor="#cecece"
+					borderRadius="50px"
+					className="shadow-lg"
+				/>
+			</div>
+
+			{phase === "SUBMISSION" ? (
+				<EditableForm initialFields={fields} onSubmit={handleDocSubmit} />
+			) : phase === "UPLOAD" ? (
+				<PdfUploadForm onSubmit={handlePdfUploadFormSubmit} />
+			) : (
+				// <DocCommitment commitment={commitment} upload={upload} />
+				<></>
+			)}
+			{/* <button
+				onClick={() =>
+					handleDocCommit("test filename", "0x1231123123", [
+						{
+							key: "this is a key",
+							value: "this is a value",
+						},
+					])
+				}
+			>
+				send
+			</button> */}
+		</ModalContent>
 	);
 }
 
-export default ModalWithContext;
+export default ModalContainer;

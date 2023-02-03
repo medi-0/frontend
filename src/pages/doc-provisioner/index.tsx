@@ -1,28 +1,74 @@
-import Button from "../../components/Button";
-import MenuBar from "../../components/MenuBar";
-import DocumentList from "../../components/DocumentList";
-import { ReactComponent as UploadSvg } from "../../lib/assets/svg/upload.svg";
-import { useMainModelContext } from "../../providers/MainModalContext";
+import DocumentList from "../../components/CommittedDocList";
+import UploadInitButton from "../../components/UploadInitButton";
 
-function DocProvisionerContainer() {
-	return <DocProvisioner />;
-}
+import { useAccount } from "wagmi";
+import { gql } from "@apollo/client";
+import { Modal } from "./components";
+import { useCallback, useRef } from "react";
+import { CommittedMedicalDocumentHeader } from "../../lib/types";
+import { useMainModalContext } from "../../providers/MainModalContext";
 
-function DocProvisioner() {
-	const modalContext = useMainModelContext();
+function DocProvisionerView() {
+	const { address } = useAccount();
+	const counterRef = useRef<HTMLSpanElement | null>(null);
+
+	const modalContext = useMainModalContext();
+
+	const handleCardClick = useCallback((doc: CommittedMedicalDocumentHeader) => {
+		console.log("card clicked", doc.cid);
+	}, []);
+
+	const handleListChange = useCallback((count: number) => {
+		if (!counterRef.current) return;
+		counterRef.current.innerText = count.toString();
+	}, []);
+
+	const GET_DOCS_FROM_HOSPITAL = gql`
+		query GetDocsFromHospital($address: String!) {
+			commitedMedicalDocuments(
+				orderDirection: desc
+				orderBy: blockTimestamp
+				where: { hospital: $address }
+			) {
+				id
+				cid
+				hash
+				patient
+				hospital
+				fileName
+				blockNumber
+				blockTimestamp
+				transactionHash
+			}
+		}
+	`;
 
 	return (
-		<div
-			className="px-8 pt-5 pb-7 h-screen grid"
-			style={{ gridTemplateRows: "min-content 1fr" }}
-		>
-			<MenuBar />
-			<div className="max-w-screen-xl w-full mx-auto h-full gap-5 overflow-clip relative">
-				<DocumentList />
-				<Button onClick={modalContext.onOpen} icon={UploadSvg} text="Upload" />
+		<>
+			<div
+				className="mb-3 font-semibold flex"
+				style={{
+					fontSize: "0.85rem",
+				}}
+			>
+				<div className="px-2.5 border rounded bg-neutral-300">
+					Total docs :{" "}
+					<span id="list-counter" ref={counterRef}>
+						3
+					</span>
+				</div>
 			</div>
-		</div>
+
+			<DocumentList
+				address={address || "0x0"}
+				query={GET_DOCS_FROM_HOSPITAL}
+				onClick={handleCardClick}
+				onChange={handleListChange}
+			/>
+			<UploadInitButton onClick={modalContext.onOpen} />
+			<Modal />
+		</>
 	);
 }
 
-export default DocProvisionerContainer;
+export default DocProvisionerView;

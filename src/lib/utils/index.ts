@@ -1,3 +1,4 @@
+import axios from "axios";
 import { Configuration, OpenAIApi } from "openai";
 
 export async function processText(text: string): Promise<{
@@ -6,7 +7,7 @@ export async function processText(text: string): Promise<{
 }> {
 	const openai = new OpenAIApi(
 		new Configuration({
-			apiKey: process.env.NEXT_PUBLIC_OPENAI_API,
+			apiKey: process.env.REACT_APP_NEXT_PUBLIC_OPENAI_API,
 		})
 	);
 	// Limit the size of the text to 2048 characters
@@ -28,7 +29,6 @@ export async function processText(text: string): Promise<{
 		presence_penalty: 0,
 		stop: ["/##"],
 	});
-	console.log(response.data.choices[0].text);
 
 	if (
 		response.status !== 200 ||
@@ -51,7 +51,7 @@ export interface Field {
 	value: string;
 }
 
-export function parseJSON(jsonString: string): Field[] {
+export function fieldsFromJSON(jsonString: string): Field[] {
 	const json = JSON.parse(jsonString);
 	const result: Field[] = [];
 	json.forEach((obj: any) => {
@@ -63,4 +63,31 @@ export function parseJSON(jsonString: string): Field[] {
 export function humanFileSize(size: number) {
 	const i = size == 0 ? 0 : Math.floor(Math.log(size) / Math.log(1024));
 	return (size / Math.pow(1024, i)).toFixed(2) + " " + ["B", "kB", "MB", "GB", "TB"][i];
+}
+
+export function truncateHexWithEllipsis(hexString: string | `0x${string}`) {
+	const len = hexString.length;
+	if (len < 11) return hexString;
+	return hexString.substring(0, 6) + "..." + hexString.substring(len - 6, len - 1);
+}
+
+export async function parsePdf(file: File) {
+	const formData = new FormData();
+	formData.append("file", file as Blob);
+
+	try {
+		const res = await axios.post<{ data: string }>(
+			"https://medi0backend.spicybuilds.xyz/processpdf",
+			formData,
+			{
+				headers: {
+					"Content-Type": "multipart/form-data",
+				},
+			}
+		);
+
+		return res.data.data;
+	} catch (e) {
+		throw e;
+	}
 }
