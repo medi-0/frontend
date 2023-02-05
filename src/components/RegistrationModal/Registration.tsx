@@ -1,5 +1,5 @@
 import img1 from "../../Lib/assets/Hospital.jpg";
-import img2 from "../../Lib/assets/Checklist.jpg";
+import img2 from "../../Lib/assets/Patient.jpg";
 import ABI from "../../Lib/assets/message.json";
 import Connect from "../connectWallet/ConnectWallet";
 import {
@@ -25,23 +25,26 @@ import {
   Input,
   FormControl,
   FormLabel,
+  CardBody,
+  Card,
+  Stack,
+  Heading,
+  Text,
+  Divider,
 } from "@chakra-ui/react";
+import { ArrowForwardIcon } from "@chakra-ui/icons";
 import path from "path";
 import fs from "fs";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { Description } from "@ethersproject/properties";
+import { url } from "inspector";
 
 // interface Result {
 //   jsonrpc: string;
 //   id: number;
 //   result: string;
 // }
-
-
-
-
-
 
 function RegistrationModal() {
   // const {config} = usePrepareContractWrite({
@@ -116,106 +119,137 @@ function RegistrationModal() {
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
 
-  const registerHospital =() =>{
-        onFirstClose();
-        onSecondOpen();
-  }
+  const registerHospital = () => {
+    onFirstClose();
+    onSecondOpen();
+  };
 
   const navigate = useNavigate();
   const handleHospital = () => {
     navigate("/Hospital");
     onSecondClose();
-
   };
   const handlePatient = () => {
     navigate("/Patient");
     onFirstClose();
-
   };
- 
 
   return (
-    <div>
-      <>
-        {/* <button
+    <>
+      {/* <button
           className="border border-solid rounded-full w-[150px] h-[50px] bg-[#F98E7C] text-[#3DF9E2]"
           onClick={onFirstOpen}
         >
           Connect Wallet
         </button> */}
 
+      <Modal isOpen={isFirstOpen} onClose={onFirstClose} isCentered>
+        <ModalOverlay />
+        <ModalContent maxH="1000px" maxW="1000px">
+          <h1 className="text-[#396AEB] text-2xl font-bold m-10">
+            Choose Side
+          </h1>
+          <ModalCloseButton />
 
-        <Modal isOpen={isFirstOpen} onClose={onFirstClose} isCentered>
-          <ModalOverlay />
-          <ModalContent maxH="1000px" maxW="1000px">
-            <h1 className="text-[#396AEB] text-2xl font-bold m-10">
-              Choose Side
-            </h1>
-            <ModalCloseButton />
-            <ModalBody maxH="1000px" maxW="1000px">
-              <div className="flex justify-center items-center">
-                <div className="text-center">
-                  <img src={img1} width={300} height={300} alt="" />
-
-                  <button
-                    className="border border-solid rounded-full w-40 h-10 my-10"
+          <ModalBody maxH="1000px" maxW="1000px">
+            <div className="flex justify-around">
+              <Card maxW="sm" className="tag">
+                <CardBody>
+                  <img src={img1} width={400} height={400} alt="" />
+                  <Stack mt="6" spacing="3">
+                    <div className="flex justify-center items-center flex-col">
+                      <Heading size="md" className="mb-[10px]">
+                        Register as Hospital
+                      </Heading>
+                      <Text>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Eligendi est dignissimos odit sit dolorum numquam
+                        aliquid odio quo? Molestias, deserunt. Atque placeat
+                        asperiores pariatur voluptatibus soluta? Sapiente
+                        perferendis optio deleniti!
+                      </Text>
+                    </div>
+                  </Stack>
+                </CardBody>
+                <div className="flex justify-center items-center py-[20px]">
+                  <Button
                     onClick={registerHospital}
+                    variant="solid"
+                    colorScheme="blue"
+                    className="w-[300px] flex button-start"
                   >
-                    Register Hospital
-                  </button>
+                    <div className="mr-[10px]">Register</div>
+                    <ArrowForwardIcon className="arrow" />
+                  </Button>
                 </div>
-                <div className="h-[300px] w-px bg-slate-200 mx-20">
-                  <h1></h1>
-                </div>
-                <div className="text-center">
-                  <img src={img2} width={300} height={300} alt="" />
+              </Card>
 
-                  <button
-                    className="border border-solid rounded-full w-40 h-10 my-10"
+              <Card maxW="sm" className="tag">
+                <CardBody>
+                  <img src={img2} width={400} height={400} alt="" />
+                  <Stack mt="6" spacing="3">
+                    <div className="flex justify-center items-center flex-col">
+                      <Heading size="md" className="mb-[10px]">
+                        Register as Patient
+                      </Heading>
+                      <Text>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Eligendi est dignissimos odit sit dolorum numquam
+                        aliquid odio quo? Molestias, deserunt. Atque placeat
+                        asperiores pariatur voluptatibus soluta? Sapiente
+                        perferendis optio deleniti!
+                      </Text>
+                    </div>
+                  </Stack>
+                </CardBody>
+                <div className="flex justify-center items-center py-[20px]">
+                  <Button
                     onClick={handlePatient}
+                    variant="solid"
+                    colorScheme="blue"
+                    className="w-[300px] flex button-start"
                   >
-                    Register Patient
-                  </button>
+                    <div className="mr-[10px]">Register</div>
+                    <ArrowForwardIcon className="arrow" />
+                  </Button>
                 </div>
-              </div>
-            </ModalBody>
-          </ModalContent>
-        </Modal>
+              </Card>
+            </div>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
 
 
 
-        <Modal isOpen={isSecondOpen} onClose={onSecondClose}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>Create your account</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody pb={6}>
-              <FormControl>
-                <FormLabel>Name</FormLabel>
-                <Input value={name} onChange={(e) => setName(e.target.value)} />
-              </FormControl>
+      <Modal isOpen={isSecondOpen} onClose={onSecondClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Register Hospital Data</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+            <FormControl>
+              <FormLabel>Name</FormLabel>
+              <Input value={name} onChange={(e) => setName(e.target.value)} />
+            </FormControl>
 
-              <FormControl mt={4}>
-                <FormLabel>Description</FormLabel>
-                <Input
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                />
-              </FormControl>
-            </ModalBody>
+            <FormControl mt={4}>
+              <FormLabel>Description</FormLabel>
+              <Input
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </FormControl>
+          </ModalBody>
 
-            <ModalFooter>
-              <Button colorScheme="blue" mr={3} onClick ={handleHospital}>
-                Save
-              </Button>
-              <Button onClick={onSecondClose}>Cancel</Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-      </>
-    </div>
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={handleHospital}>
+              Save
+            </Button>
+            <Button onClick={onSecondClose}>Cancel</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
   );
-};
+}
 export default RegistrationModal;
-
-
