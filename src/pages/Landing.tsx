@@ -6,10 +6,9 @@ import { useNavigate } from "react-router-dom";
 import { useAccount } from "wagmi";
 import ConnectWallet from "../components/connectWallet/ConnectWallet";
 import Navbar from "../components/navbar/Navbar";
-import MyModal  from "../components/RegistrationModal/MyModal";
 import Registration from "../components/RegistrationModal/Registration";
 import RegistrationModal from "../components/RegistrationModal/Registration";
-import img from "../Lib/assets/eth.png";
+import img from "../lib/assets/picture/eth.png";
 // import ABI from "../"
 
 // 1. if it is connected
@@ -20,11 +19,7 @@ import img from "../Lib/assets/eth.png";
 
 export default function Landing() {
 
-  // const {
-  //   isFirstOpen,
-  //   onFirstOpen,
-  //   onFirstClose,
-  // } = useGlobalDisclosure();
+  
   const { address, connector, isConnected } = useAccount();
 
   const navigate = useNavigate();
@@ -36,11 +31,6 @@ export default function Landing() {
   // }, [isConnected]);
 
 
-  // const {
-  //   isOpen,
-  //   onOpen,
-  //   onClose,
-  // } = useDisclosure();
 
  
 
@@ -73,7 +63,6 @@ export default function Landing() {
             
           </>
         )} */}
-        
 
         {isConnected ? (
           <>

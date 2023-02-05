@@ -5,16 +5,10 @@ import { useNavigate } from "react-router-dom";
 import ConnectWallet from "../connectWallet/ConnectWallet";
 import RegistrationModal from "../RegistrationModal/Registration";
 import { useDisclosure } from "@chakra-ui/react";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 function Navbar() {
-  // const { data, isError, isLoading } = useBalance({
-  //   address: address,
-  // });
-
   
-
-
   const navigate = useNavigate();
   const handleVerify = () => {
     navigate("/Verifier");
@@ -40,8 +34,8 @@ function Navbar() {
         >
           Verify
         </button>
-
-        <ConnectButton/>
+        <ConnectButton />
+        
         {/* <RegistrationModal /> */}
 
 

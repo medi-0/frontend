@@ -8,6 +8,7 @@ import Hospital from "./pages/Hospital";
 import Patient from "./pages/Patient";
 import { createContext } from "react";
 import Navbar from "./components/navbar/Navbar";
+import MainProvider from "./providers";
 
 
 interface UserContextState {
@@ -58,6 +59,7 @@ function App() {
 
 function AppWithContext() {
 	return (
+    
 		<MainProvider>
 			<App />
 		</MainProvider>

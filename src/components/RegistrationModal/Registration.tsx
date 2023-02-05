@@ -1,6 +1,5 @@
-import img1 from "../../Lib/assets/Hospital.jpg";
-import img2 from "../../Lib/assets/Patient.jpg";
-import ABI from "../../Lib/assets/message.json";
+import img1 from "../../lib/assets/picture/Hospital.jpg";
+import img2 from "../../lib/assets/picture/Patient.jpg";
 import Connect from "../connectWallet/ConnectWallet";
 import {
   useAccount,
@@ -9,6 +8,7 @@ import {
   useContractRead,
   useContractWrite,
   usePrepareContractWrite,
+  useWaitForTransaction,
 } from "wagmi";
 import ConnectHospital from "../connectWallet/ConnectWallet";
 // import ConnectPatient from "../connectWallet/ConnectPatient";
@@ -39,6 +39,8 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { Description } from "@ethersproject/properties";
 import { url } from "inspector";
+import { useMediCoreContract } from "../../lib/hooks/useMediCoreContract";
+import { ContractTransaction } from "ethers";
 
 // interface Result {
 //   jsonrpc: string;
@@ -116,8 +118,7 @@ function RegistrationModal() {
     onClose: onSecondClose,
   } = useDisclosure();
 
-  const [name, setName] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
+  
 
   const registerHospital = () => {
     onFirstClose();
@@ -125,14 +126,72 @@ function RegistrationModal() {
   };
 
   const navigate = useNavigate();
-  const handleHospital = () => {
-    navigate("/Hospital");
-    onSecondClose();
-  };
+
   const handlePatient = () => {
     navigate("/Patient");
     onFirstClose();
   };
+
+
+
+ 
+  const [name, setName] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const { contract } = useMediCoreContract();
+
+  // const [tx, setTx] = useState<ContractTransaction  | null>(null);
+  // const { data} = useWaitForTransaction({
+  //   hash: tx?.hash as (`0x${string}` | undefined)
+  // })
+
+  const handleHospital = () => {
+    // contract?.registerAsHospital(name,description).then(tx => {
+    //   setTx(tx)
+    // });
+
+
+    // navigate("/Hospital");
+    // onSecondClose();
+  };
+
+
+  const { address } = useAccount();
+
+  //
+  // useEffect(() => {
+  //   // console.log("tx completed", data)
+  //   // contract?.hasRole()
+
+  //   if (!contract || !address) return;
+
+  //   Promise.all([
+	// 		contract.hasRole(
+	// 			// keccak(HOSPITAL_ROLE)
+	// 			"0xc8f5b4140cca307cd927e59cbeea8291bffeee228fc677f0fa059aef7b4dd8d5",
+	// 			address
+	// 		),
+	// 		contract.hasRole(
+	// 			// keccak(PATIENT_ROLE)
+	// 			"0x72606200fac42b7dc86b75901d61ecfab2a4a1a6eded478b97a428094891abed",
+	// 			address
+	// 		),
+	// 	]).then(([isHospital, isPatient]) => {
+	// 		console.log("double", isHospital, isPatient);
+
+	// 		if (isHospital){
+  //       navigate("/Hospital")
+  //       console.log("tx completed", data)
+
+  //     }
+	// 		else if (isPatient) {
+  //       navigate("/Patient")
+  //       console.log("tx completed", data)
+  //     }
+	// 		else {};
+	// 	})
+  // }, [data])
+
+
 
   return (
     <>
