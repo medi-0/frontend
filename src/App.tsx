@@ -56,4 +56,12 @@ function App() {
   );
 }
 
-export default App;
+function AppWithContext() {
+	return (
+		<MainProvider>
+			<App />
+		</MainProvider>
+	);
+}
+
+export default AppWithContext;
