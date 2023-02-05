@@ -1,40 +1,59 @@
-import MainProvider from "./providers";
-import HospitalView from "./pages/doc-provisioner";
-import PatientView from "./pages/fact-prover";
-import MenuBar from "./components/MenuBar";
-import { useAccount } from "wagmi";
-import { useUserRole } from "./lib/hooks/useUserRole";
-import { UserRole } from "./lib/types";
+import React, { useContext, useState } from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import Landing from "./pages/Landing";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Verifier from "./pages/Verifier";
+import Hospital from "./pages/Hospital";
+import Patient from "./pages/Patient";
+import { createContext } from "react";
+import Navbar from "./components/navbar/Navbar";
+
+
+interface UserContextState {
+  logIn: boolean;
+  toggleLogIn?:()=> void;
+}
+
+const defaultState = {
+  logIn: false,
+};
+
+export const UserContext = createContext<UserContextState>(defaultState);
+
+// export function useUserContext() {
+//   return useContext(UserContext);
+// }
+
 
 function App() {
-	const { role } = useUserRole();
-	const { isConnected } = useAccount();
 
-	return (
-		<div
-			style={{ gridTemplateRows: "min-content 1fr" }}
-			className="px-10 pt-5 pb-10 font-san h-screen grid gap-6"
-		>
-			<MenuBar />
-			<div className="overflow-clip h-full">
-				{isConnected ? (
-					role === UserRole.HOSPITAL_ROLE ? (
-						<div className="w-full h-full p-4 pt-3 rounded-lg border-2 border-[#432366] overflow-clip relative">
-							<HospitalView />
-						</div>
-					) : role === UserRole.PATIENT_ROLE ? (
-						<div className="w-full h-full p-4 pt-3 rounded-lg border-2 border-[#432366] overflow-clip relative">
-							<PatientView />
-						</div>
-					) : null
-				) : (
-					<div className="h-full flex items-center justify-center text-neutral-400">
-						Not logged in.
-					</div>
-				)}
-			</div>
-		</div>
-	);
+  const [logIn,setLogIn] = React.useState(defaultState.logIn)
+
+  const toggleLogIn = () =>{
+    setLogIn(!logIn)
+  };
+ 
+  return (
+    <UserContext.Provider 
+    value={{
+      logIn,
+      toggleLogIn,
+      }}>
+        
+      <BrowserRouter>
+        <main>
+          <Navbar/>
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route path="Verifier" element={<Verifier />} />
+            <Route path="Hospital" element={<Hospital />} />
+            <Route path="Patient" element={<Patient />} />
+          </Routes>
+        </main>
+      </BrowserRouter>
+      </UserContext.Provider>
+  );
 }
 
 function AppWithContext() {

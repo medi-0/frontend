@@ -37,3 +37,17 @@ code {
 .committedDocCard:hover .committedDocTooltip {
 	animation: effect 1s infinite 700ms;
 } */
+.arrow {
+    display: inline-block;
+    transform: translateX(20%);
+    transition: 1s;
+}
+
+.button-start:hover > .arrow{
+    transform: translateX(50%);
+}
+
+.tag:hover {
+    transform: translateY(-25px);
+    transition: 0.5s ease-in-out
+}

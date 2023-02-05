@@ -4,6 +4,7 @@ import { goerli, polygonMumbai } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 
+import { RainbowKitProvider, getDefaultWallets } from "@rainbow-me/rainbowkit";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 import { infuraProvider } from "wagmi/providers/infura";
@@ -17,6 +18,11 @@ const { chains, provider, webSocketProvider } = configureChains(
 		publicProvider(),
 	]
 );
+
+const { connectors } = getDefaultWallets({
+	appName: "My RainbowKit App",
+	chains,
+  });
 
 const client = createClient({
 	autoConnect: true,
@@ -35,5 +41,10 @@ const client = createClient({
 });
 
 export const WagmiProvider: React.FC<PropsWithChildren> = function ({ children }) {
-	return <WagmiConfig client={client}>{children}</WagmiConfig>;
+	return <WagmiConfig client={client}>
+		<RainbowKitProvider chains={chains}>
+
+		{children}
+		</RainbowKitProvider>
+		</WagmiConfig>;
 };
