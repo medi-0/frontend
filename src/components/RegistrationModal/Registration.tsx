@@ -1,11 +1,17 @@
 import img1 from "../../Lib/assets/Hospital.jpg";
 import img2 from "../../Lib/assets/Checklist.jpg";
 import ABI from "../../Lib/assets/message.json";
-import Connect from "../connectWallet/ConnectHospital";
-import { useAccount, useBalance,useContract ,useContractRead,useContractWrite, usePrepareContractWrite } from "wagmi";
-import ConnectHospital from "../connectWallet/ConnectHospital";
-import ConnectPatient from "../connectWallet/ConnectPatient";
-import { useState } from "react";
+import Connect from "../connectWallet/ConnectWallet";
+import {
+  useAccount,
+  useBalance,
+  useContract,
+  useContractRead,
+  useContractWrite,
+  usePrepareContractWrite,
+} from "wagmi";
+import ConnectHospital from "../connectWallet/ConnectWallet";
+// import ConnectPatient from "../connectWallet/ConnectPatient";
 import {
   Modal,
   ModalOverlay,
@@ -17,20 +23,27 @@ import {
   Button,
   useDisclosure,
   Input,
+  FormControl,
+  FormLabel,
 } from "@chakra-ui/react";
 import path from "path";
-import fs from "fs"
+import fs from "fs";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useLayoutEffect, useState } from "react";
+import { Description } from "@ethersproject/properties";
+
+// interface Result {
+//   jsonrpc: string;
+//   id: number;
+//   result: string;
+// }
 
 
-interface Result {
-  jsonrpc: string;
-  id: number;
-  result: string;
-}
 
 
-function Login() {
 
+
+function RegistrationModal() {
   // const {config} = usePrepareContractWrite({
   //   address: "0xf86EaD782f5e14EA54e4E34cB8b21DFD924573dd",
   //   functionName: "Write contract",
@@ -46,7 +59,6 @@ function Login() {
   //   }
   // )
 
-  
   //---working---
   // const { data, isError, isLoading } = useContractRead(
   //   {
@@ -54,12 +66,11 @@ function Login() {
   //     abi: ABI,
   //     functionName: "hospitals",
   //     args: [
-  //       // this is a fake value 
+  //       // this is a fake value
   //       '0x5B38Da6a701c568545dCfcB03FcB875f56beddC4'
   //     ]
   //   }
   // )
-
 
   // const { data, isError, isLoading, write } = useContractWrite(
   //   {
@@ -70,7 +81,6 @@ function Login() {
   //   'registerAsHospital'
   // )
 
-  
   // const data2 = data as Result;
   // console.log(`isLoading: ${isLoading}`)
   // console.log(`isError: ${isError}`)
@@ -89,27 +99,53 @@ function Login() {
   //   })
   // }
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  // const navigate = useNavigate();
 
-  const { address, connector, isConnected } = useAccount();
+  const {
+    isOpen: isFirstOpen,
+    onOpen: onFirstOpen,
+    onClose: onFirstClose,
+  } = useDisclosure({ defaultIsOpen: true });
 
-  // const { data, isError, isLoading } = useBalance({
-  //   address: address,
-  // });
+  const {
+    isOpen: isSecondOpen,
+    onOpen: onSecondOpen,
+    onClose: onSecondClose,
+  } = useDisclosure();
 
-  
+  const [name, setName] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+
+  const registerHospital =() =>{
+        onFirstClose();
+        onSecondOpen();
+  }
+
+  const navigate = useNavigate();
+  const handleHospital = () => {
+    navigate("/Hospital");
+    onSecondClose();
+
+  };
+  const handlePatient = () => {
+    navigate("/Patient");
+    onFirstClose();
+
+  };
+ 
 
   return (
-
     <div>
       <>
-        <button
+        {/* <button
           className="border border-solid rounded-full w-[150px] h-[50px] bg-[#F98E7C] text-[#3DF9E2]"
-          onClick={onOpen}
+          onClick={onFirstOpen}
         >
           Connect Wallet
-        </button>
-        <Modal onClose={onClose} isOpen={isOpen} isCentered>
+        </button> */}
+
+
+        <Modal isOpen={isFirstOpen} onClose={onFirstClose} isCentered>
           <ModalOverlay />
           <ModalContent maxH="1000px" maxW="1000px">
             <h1 className="text-[#396AEB] text-2xl font-bold m-10">
@@ -121,15 +157,12 @@ function Login() {
                 <div className="text-center">
                   <img src={img1} width={300} height={300} alt="" />
 
-    
                   <button
                     className="border border-solid rounded-full w-40 h-10 my-10"
-                    onClick={onClose}
+                    onClick={registerHospital}
                   >
-                    <ConnectHospital/>
+                    Register Hospital
                   </button>
-
-
                 </div>
                 <div className="h-[300px] w-px bg-slate-200 mx-20">
                   <h1></h1>
@@ -137,27 +170,52 @@ function Login() {
                 <div className="text-center">
                   <img src={img2} width={300} height={300} alt="" />
 
-
                   <button
-                    className="border border-solid rounded-full w-40 h-10 my-10 "
-                    onClick={onClose}
+                    className="border border-solid rounded-full w-40 h-10 my-10"
+                    onClick={handlePatient}
                   >
-                    <ConnectPatient/>
+                    Register Patient
                   </button>
-
-                  
-                  {/* <button className="border border-solid border-red-700 rounded-full w-[100px] h-[40px] bg-[#60DA9A] text-[#fff] text-sm">Register as FP</button> */}
                 </div>
               </div>
             </ModalBody>
+          </ModalContent>
+        </Modal>
+
+
+
+        <Modal isOpen={isSecondOpen} onClose={onSecondClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Create your account</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody pb={6}>
+              <FormControl>
+                <FormLabel>Name</FormLabel>
+                <Input value={name} onChange={(e) => setName(e.target.value)} />
+              </FormControl>
+
+              <FormControl mt={4}>
+                <FormLabel>Description</FormLabel>
+                <Input
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </FormControl>
+            </ModalBody>
+
             <ModalFooter>
-              <Button onClick={onClose}>Close</Button>
+              <Button colorScheme="blue" mr={3} onClick ={handleHospital}>
+                Save
+              </Button>
+              <Button onClick={onSecondClose}>Cancel</Button>
             </ModalFooter>
           </ModalContent>
         </Modal>
       </>
     </div>
   );
-}
+};
+export default RegistrationModal;
 
-export default Login;
+

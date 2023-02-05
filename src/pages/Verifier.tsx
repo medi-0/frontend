@@ -1,7 +1,6 @@
 import { useState } from "react";
 import Navbar from "../components/navbar/Navbar";
 import { VerifyFormPanel } from "../components/verifier/ProofVerifier";
-import VerifierModal from "../components/verifier/VerifierModal";
 
 export default function Verifier() {
   return (

@@ -128,14 +128,6 @@ export function VerifyFormPanel() {
                   </CardHeader>
                   <CardBody>
                     <Stack divider={<StackDivider />} spacing="4">
-                      {/* <Box>
-                    <Heading size="xs" textTransform="uppercase">
-                      Smart contract address
-                    </Heading>
-                    <Text pt="2" fontSize="sm">
-                      {process.env.REACT_APP_PUBLIC_CONTRACT_ADDRESS}
-                    </Text>
-                  </Box> */}
                       <Box>
                         <Heading size="xs" textTransform="uppercase">
                           Verifier Address

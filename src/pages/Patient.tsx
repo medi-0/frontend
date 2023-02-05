@@ -10,8 +10,8 @@ export default function Patient() {
   return (
     <div>
       <h1>This is patient page</h1>
-      <p>{logIn ? <>you are logged in</> : <>NOT loged in</>}</p>
-      {/* {context} */}
+      {/* <p>{logIn ? <>you are logged in</> : <>NOT loged in</>}</p>
+      {context} */}
     </div>
   );
 }

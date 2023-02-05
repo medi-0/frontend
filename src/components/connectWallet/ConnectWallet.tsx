@@ -4,6 +4,7 @@ import { useAccount, usePrepareContractWrite } from "wagmi";
 import fs from 'fs'
 import path from "path";
 import { useNavigate } from "react-router-dom";
+// import Login from "../RegistrationModal/Registration";
 
 
 // type LoginName = {
@@ -22,9 +23,9 @@ import { useNavigate } from "react-router-dom";
 // }
 
 
-function ConnectHospital({}) {
+function ConnectWallet({}) {
 
-  const { address, connector, isConnected } = useAccount();
+  // const { address, connector, isConnected } = useAccount();
 
 
   return (
@@ -62,7 +63,7 @@ function ConnectHospital({}) {
                 if (!connected) {
                   return (
                     <button onClick={openConnectModal} type="button">
-                      Connect as Hospital
+                      Connect Wallet
                     </button>
                   );
 
@@ -123,4 +124,4 @@ function ConnectHospital({}) {
   );
 }
 
-export default ConnectHospital;
+export default ConnectWallet;
