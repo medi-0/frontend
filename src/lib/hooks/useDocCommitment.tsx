@@ -34,14 +34,14 @@ export function useDocCommitment() {
 					cid: cid as CIDString,
 				});
 
-				contract
-					.commitPatientFileHashAndPatientData(
-						doc.patientAddress as `0x${string}`,
-						doc.docName,
-						cid as string,
-						BigNumber.from(0)
-					)
-					.then((res) => res.wait().then((receipt) => setReceipt(receipt)));
+				// contract
+				// 	.commitPatientFileHashAndPatientData(
+				// 		doc.patientAddress as `0x${string}`,
+				// 		doc.docName,
+				// 		cid as string,
+				// 		BigNumber.from(0)
+				// 	)
+				// 	.then((res) => res.wait().then((receipt) => setReceipt(receipt)));
 			})
 			.catch((e) => {
 				setError(e);

@@ -1,5 +1,6 @@
 import moment from "moment";
-import { CommittedMedicalDocumentHeader } from "../lib/types";
+import { useUserRole } from "../lib/hooks/useUserRole";
+import { CommittedMedicalDocumentHeader, UserRole } from "../lib/types";
 
 interface Props {
 	data: CommittedMedicalDocumentHeader;
@@ -7,6 +8,7 @@ interface Props {
 }
 
 function CommittedDocCard({ data, onClick }: Props) {
+	const { role } = useUserRole();
 	const date = moment.unix(data.blockTimestamp).toLocaleString();
 
 	return (
@@ -17,8 +19,17 @@ function CommittedDocCard({ data, onClick }: Props) {
 			<div>
 				<div className="font-bold mb-1">{data.fileName}</div>
 				<div className="text-xs">
-					<span>Patient ID : </span>
-					<span className="italic">{data.patient}</span>
+					{role === UserRole.HOSPITAL_ROLE ? (
+						<>
+							<span>Patient ID : </span>
+							<span className="italic">{data.patient}</span>
+						</>
+					) : (
+						<>
+							<span>Hospital ID :</span>
+							<span className="italic">{data.hospital}</span>
+						</>
+					)}
 				</div>
 			</div>
 			<div className="text-xs italic">

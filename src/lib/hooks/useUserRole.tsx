@@ -7,7 +7,7 @@ export function useUserRole() {
 	const [role, setRole] = useState<UserRole>(UserRole.UNREGISTERED);
 
 	const { address } = useAccount();
-	const { contract } = useMediCoreContract();
+	const { contract, isLoading, isError } = useMediCoreContract();
 
 	useEffect(() => {
 		if (!contract || !address) return;
@@ -32,5 +32,5 @@ export function useUserRole() {
 		});
 	}, [contract]);
 
-	return { role };
+	return { role, isLoading, isError };
 }

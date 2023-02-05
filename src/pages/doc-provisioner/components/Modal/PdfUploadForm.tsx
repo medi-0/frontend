@@ -68,21 +68,24 @@ export default function PdfUploadForm({ onSubmit }: PdfUploadProps) {
 
 		setIsLoading(true);
 
-		// parsePdf(file)
-		file.text()
+		parsePdf(file)
+			// file
+			// .text()
 			.then((value) => {
-				const respText =
-					'[{"key": "name", "value": "The value"}, {"key": "date of birth", "value": "Another value"}, {"key": "treatments", "value": ""}, {"key": "medicines", "value": ""}, {"key": "allergies", "value": ""}, {"key": "x-ray results", "value": ""}, {"key": "hostpital admission", "value": ""}, {"key": "hostpital discharge", "value": ""}, {"key": "lifestyle", "value": ""}]';
+				// const respText =
+				// 	'[{"key": "name", "value": "The value"}, {"key": "date of birth", "value": "Another value"}, {"key": "treatments", "value": ""}, {"key": "medicines", "value": ""}, {"key": "allergies", "value": ""}, {"key": "x-ray results", "value": ""}, {"key": "hostpital admission", "value": ""}, {"key": "hostpital discharge", "value": ""}, {"key": "lifestyle", "value": ""}]';
 				// console.log("parse pdf", value);
 				// file.text()
 
-				// processText(value).then(({ respText }) => {
-				// 	onSubmit(respText);
-				// 	setIsError(false);
-				// });
+				console.log("something bruh", value);
 
-				onSubmit(respText);
-				setIsError(false);
+				processText(value).then(({ respText }) => {
+					onSubmit(respText);
+					setIsError(false);
+				});
+
+				// onSubmit(respText);
+				// setIsError(false);
 			})
 			.catch((_e) => setIsError(true))
 			.finally(() => setIsLoading(true));

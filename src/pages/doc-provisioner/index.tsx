@@ -51,7 +51,7 @@ function DocProvisionerView() {
 					fontSize: "0.85rem",
 				}}
 			>
-				<div className="px-2.5 border rounded bg-neutral-300">
+				<div className="px-2.5 border rounded bg-neutral-100">
 					Total docs :{" "}
 					<span id="list-counter" ref={counterRef}>
 						3
@@ -63,7 +63,7 @@ function DocProvisionerView() {
 				address={address || "0x0"}
 				query={GET_DOCS_FROM_HOSPITAL}
 				onClick={handleCardClick}
-				onChange={handleListChange}
+				onChange={() => handleListChange(3)}
 			/>
 			<UploadInitButton onClick={modalContext.onOpen} />
 			<Modal />
