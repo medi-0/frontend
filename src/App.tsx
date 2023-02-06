@@ -7,13 +7,14 @@ import { BrowserRouter, Routes, Route, useNavigate, Navigate } from "react-route
 import { useUser } from "./providers/UserProvider";
 import { UserRole } from "./lib/types";
 import Error404Page from "./pages/404";
+import UserSpecificView from "./pages/UserSpecificView";
 
 function App() {
 	const { role } = useUser();
 	const navigate = useNavigate();
 
 	const handleClick = function () {
-		navigate("/app/patient");
+		navigate("/app");
 	};
 
 	return (
@@ -23,13 +24,10 @@ function App() {
 
 				<Route path="/verifier" element={<Verifier />} />
 
-				{role.type === UserRole.PATIENT_ROLE && (
+				{/* {role.type === UserRole.PATIENT_ROLE && (
 					<Route path="/app/patient" element={<Patient />} />
-				)}
-
-				{role.type === UserRole.HOSPITAL_ROLE && (
-					<Route path="/app/hospital" element={<Hospital />} />
-				)}
+				)} */}
+				<Route path="/app" element={<UserSpecificView />} />
 
 				<Route path="/404" element={<Error404Page />} />
 			</Routes>
