@@ -8,7 +8,7 @@ interface Props {
 }
 
 function CommittedDocCard({ data, onClick }: Props) {
-	const { role } = useUserRole();
+	const { type: role } = useUserRole();
 	const date = moment.unix(data.blockTimestamp).toLocaleString();
 
 	return (

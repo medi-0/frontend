@@ -4,13 +4,18 @@ import { UserRole } from "../types";
 import { useMediCoreContract } from "./useMediCoreContract";
 
 export function useUserRole() {
-	const [role, setRole] = useState<UserRole>(UserRole.UNREGISTERED);
+	const [role, setRole] = useState<UserRole | null>(null);
 
 	const { address } = useAccount();
 	const { contract, isLoading, isError } = useMediCoreContract();
 
 	useEffect(() => {
-		if (!contract || !address) return;
+		if (!address) {
+			setRole(null);
+			return;
+		}
+
+		if (!contract) return;
 
 		Promise.all([
 			contract.hasRole(
@@ -24,13 +29,11 @@ export function useUserRole() {
 				address
 			),
 		]).then(([isHospital, isPatient]) => {
-			console.log("double", isHospital, isPatient);
-
 			if (isHospital) setRole(UserRole.HOSPITAL_ROLE);
 			else if (isPatient) setRole(UserRole.PATIENT_ROLE);
 			else setRole(UserRole.UNREGISTERED);
 		});
-	}, [contract]);
+	}, [contract, address]);
 
-	return { role, isLoading, isError };
+	return { type: role, isLoading, isError };
 }

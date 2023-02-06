@@ -1,6 +1,6 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useState, useContext, useEffect, useMemo } from "react";
-import { useAccount, usePrepareContractWrite } from "wagmi";
+// import { useAccount, usePrepareContractWrite } from "wagmi";
 import fs from 'fs'
 import path from "path";
 import { useNavigate } from "react-router-dom";

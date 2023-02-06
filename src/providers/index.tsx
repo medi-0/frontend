@@ -2,6 +2,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { PropsWithChildren } from "react";
 import { GraphQLProvider } from "./GraphQLProvider";
 import { ModelContextProvider } from "./MainModalContext";
+import { UserProvider } from "./UserProvider";
 import { WagmiProvider } from "./WagmiProvider";
 
 const MainProvider: React.FC<PropsWithChildren> = function ({ children }) {
@@ -9,7 +10,9 @@ const MainProvider: React.FC<PropsWithChildren> = function ({ children }) {
 		<ChakraProvider>
 			<GraphQLProvider>
 				<WagmiProvider>
-					<ModelContextProvider>{children}</ModelContextProvider>
+					<UserProvider>
+						<ModelContextProvider>{children}</ModelContextProvider>
+					</UserProvider>
 				</WagmiProvider>
 			</GraphQLProvider>
 		</ChakraProvider>
