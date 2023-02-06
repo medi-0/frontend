@@ -22,7 +22,6 @@ export function CommitmentProgress({
 	return (
 		<div className="flex gap-3">
 			<div className="border border-neutral-200 p-3">
-				{/* {} */}
 				{uploadIsLoading ? (
 					(
 						<div>

@@ -4,33 +4,26 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 function Navbar() {
 	const navigate = useNavigate();
 
-	const handleVerify = () => {
-		navigate("/Verifier");
-	};
-	const handleLogo = () => {
-		navigate("/");
-	};
-
 	return (
-		<div className="h-24 flex justify-between items-center px-20">
+		<div className="flex justify-between items-center px-20 py-4">
 			<div>
 				<button
-					onClick={handleLogo}
-					className="text-[#396AEB] text-2xl font-extrabold"
+					onClick={() => navigate("/")}
+					className="text-[#396AEB] text-2xl font-extrabold font-sans"
 				>
-					Medi Zero
+					MediZero
 				</button>
 			</div>
 
 			<div className="flex items-center">
 				<button
-					onClick={handleVerify}
-					className="m-[15px] text-lg font-bold text-[#396AEB] "
+					onClick={() => navigate("/Verifier")}
+					className="text-lg text-[#396AEB] mr-8 hover:underline"
 				>
 					Verify
 				</button>
 
-				<ConnectButton />
+				<ConnectButton showBalance={false} />
 			</div>
 		</div>
 	);
