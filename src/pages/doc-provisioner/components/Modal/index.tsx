@@ -12,9 +12,9 @@ import { useCallback } from "react";
 import PdfUploadForm from "./PdfUploadForm";
 import { useState } from "react";
 import { useDocUploadIpfs } from "../../../../lib/hooks/useDocUploadIpfs";
-import { DocCommitment } from "./DocUploadIpfs";
 import { useDocCommitment } from "../../../../lib/hooks/useDocCommitment";
 import { Doc } from "../../../../lib/types";
+import { CommitmentProgress } from "./CommitmentProgress";
 
 type ModalPhase = "UPLOAD" | "SUBMISSION" | "COMMITMENT";
 
@@ -69,35 +69,31 @@ function Modal() {
 			paddingTop="2rem"
 			paddingX="1rem"
 		>
-			{/* <ModalHeader paddingBottom="0.5rem">Document Provisioning</ModalHeader> */}
-			<div className="absolute top-[-25px] right-[-25px] bg-white">
-				<ModalCloseButton
-					backgroundColor="#cecece"
-					borderRadius="50px"
-					className="shadow-lg"
-				/>
-			</div>
+			<ModalCloseButton
+				height="min-content"
+				backgroundColor="#df57a7"
+				borderRadius="2rem"
+				className="shadow-lg"
+				width="4rem"
+				padding="0.2rem 1rem"
+			>
+				<span className="font-bold text-white">close</span>
+			</ModalCloseButton>
 
 			{phase === "SUBMISSION" ? (
 				<EditableForm initialFields={fields} onSubmit={handleDocSubmit} />
 			) : phase === "UPLOAD" ? (
 				<PdfUploadForm onSubmit={handlePdfUploadFormSubmit} />
 			) : (
-				// <DocCommitment commitment={commitment} upload={upload} />
-				<></>
+				<CommitmentProgress
+					ipfsData={upload.cid}
+					ipfsIsError={upload.isError}
+					ipfsIsLoading={upload.isLoading}
+					commitmentData={commitment.receipt}
+					commitmentIsError={commitment.isError}
+					commitmentIsLoading={commitment.isLoading}
+				/>
 			)}
-			{/* <button
-				onClick={() =>
-					handleDocCommit("test filename", "0x1231123123", [
-						{
-							key: "this is a key",
-							value: "this is a value",
-						},
-					])
-				}
-			>
-				send
-			</button> */}
 		</ModalContent>
 	);
 }

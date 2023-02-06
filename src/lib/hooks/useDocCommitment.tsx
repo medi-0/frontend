@@ -1,8 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
-import { Doc, DocWithCID } from "../types";
+import { Doc } from "../types";
+import { useState } from "react";
 import { useDocUploadIpfs } from "../hooks/useDocUploadIpfs";
-import { CIDString } from "web3.storage";
-import { useWaitForTransaction } from "wagmi";
 
 import { useMediCoreContract } from "./useMediCoreContract";
 import { BigNumber } from "ethers";
@@ -13,8 +11,6 @@ export function useDocCommitment() {
 
 	const ipfs = useDocUploadIpfs();
 
-	const [doc, setDoc] = useState<DocWithCID | null>(null);
-
 	const [error, setError] = useState<any>();
 	const [isError, setIsError] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
@@ -24,28 +20,42 @@ export function useDocCommitment() {
 	const commit = async function (doc: Doc) {
 		if (!contract) return;
 
-		setIsLoading(true);
-		ipfs.upload(doc)
-			.then((cid) => {
-				setDoc({
-					...doc,
-					cid: cid as CIDString,
-				});
+		try {
+			const cid = await ipfs.upload(doc);
 
-				// contract
-				// 	.commitPatientFileHashAndPatientData(
-				// 		doc.patientAddress as `0x${string}`,
-				// 		doc.docName,
-				// 		cid as string,
-				// 		BigNumber.from(0)
-				// 	)
-				// 	.then((res) => res.wait().then((receipt) => setReceipt(receipt)));
-			})
-			.catch((e) => {
-				setError(e);
-				setIsError(true);
-			})
-			.finally(() => setIsLoading(false));
+			setIsLoading(true);
+
+			const tx = await contract.commitPatientFileHashAndPatientData(
+				doc.patientAddress as `0x${string}`,
+				doc.docName,
+				cid as string,
+				BigNumber.from(0)
+			);
+
+			const txReceipt = await tx.wait();
+			setReceipt(txReceipt);
+		} catch (e) {
+			setError(e);
+			setIsError(true);
+		}
+
+		setIsLoading(false);
+		// ipfs.upload(doc).then((cid) => {
+		// 	setIsLoading(true);
+		// 	contract
+		// 		.commitPatientFileHashAndPatientData(
+		// 			doc.patientAddress as `0x${string}`,
+		// 			doc.docName,
+		// 			cid as string,
+		// 			BigNumber.from(0)
+		// 		)
+		// 		.then((res) => res.wait().then((receipt) => setReceipt(receipt)))
+		// 		.catch((e) => {
+		// 			setError(e);
+		// 			setIsError(true);
+		// 		})
+		// 		.finally(() => setIsLoading(false));
+		// });
 	};
 
 	return {
@@ -53,9 +63,9 @@ export function useDocCommitment() {
 		commitment: {
 			error,
 			commit,
+			receipt,
 			isError,
 			isLoading,
-			// receipt,
 		},
 	};
 }

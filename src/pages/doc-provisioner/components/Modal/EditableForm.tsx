@@ -146,7 +146,7 @@ function EditableForm({
 
 	return (
 		<>
-			<ModalBody className="" paddingX="0" paddingY="0">
+			<ModalBody className="" padding="0.7rem 0 0 0">
 				<form className="flex flex-col h-[500px]" ref={formRef}>
 					<div className="p-3 pt-4 flex gap-4 rounded-lg mb-4 bg-zinc-100">
 						<label className=" flex-1 ">

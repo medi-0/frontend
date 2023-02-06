@@ -20,10 +20,11 @@ code {
 
 .animated-gradient {
 	filter: saturate(0.9);
-	animation: animateBg 3s linear infinite;
-	background-image: linear-gradient(90deg, #ffad5b, #e4859d, #ffad5b, #e4859d);
+	animation: animateBg 1s linear infinite;
+	background-image: linear-gradient(90deg, #ffad5b, #e4859d, #a123db, #e4859d);
 	background-size: 300% 100%;
 }
+
 @keyframes animateBg {
 	0% {
 		background-position: 100% 0%;
@@ -33,21 +34,29 @@ code {
 	}
 }
 
+.commitment-progress-loader {
+	filter: saturate(0.9);
+	animation: animateBg 1s linear infinite;
+	animation-direction: alternate;
+	background-image: linear-gradient(90deg, #ffad5b, #e4859d, #ffad5b);
+	background-size: 300% 100%;
+}
+
 /* 
 .committedDocCard:hover .committedDocTooltip {
 	animation: effect 1s infinite 700ms;
 } */
 .arrow {
-    display: inline-block;
-    transform: translateX(20%);
-    transition: 1s;
+	display: inline-block;
+	transform: translateX(20%);
+	transition: 1s;
 }
 
-.button-start:hover > .arrow{
-    transform: translateX(50%);
+.button-start:hover > .arrow {
+	transform: translateX(50%);
 }
 
 .tag:hover {
-    transform: translateY(-25px);
-    transition: 0.5s ease-in-out
+	transform: translateY(-25px);
+	transition: 0.5s ease-in-out;
 }
