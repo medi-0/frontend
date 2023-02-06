@@ -19,7 +19,7 @@ import { useDocCommitment } from "../../../../lib/hooks/useDocCommitment";
 
 type ModalPhase = "UPLOAD" | "SUBMISSION" | "COMMITMENT";
 
-function ModalContainer() {
+export default function ModalContainer() {
 	const mainModal = useMainModalContext();
 
 	return (
@@ -102,5 +102,3 @@ function Modal() {
 		</ModalContent>
 	);
 }
-
-export default ModalContainer;

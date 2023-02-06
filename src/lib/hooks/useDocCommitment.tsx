@@ -22,8 +22,6 @@ export function useDocCommitment() {
 	const [receipt, setReceipt] = useState<TransactionReceipt | null>(null);
 
 	const commit = async function (doc: Doc) {
-		console.log("here also");
-
 		if (!contract) return;
 
 		setIsLoading(true);

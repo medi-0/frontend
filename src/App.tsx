@@ -1,68 +1,45 @@
-import React, { useContext, useState } from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import { useEffect } from "react";
 import Landing from "./pages/Landing";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Verifier from "./pages/Verifier";
-import Hospital from "./pages/Hospital";
-import Patient from "./pages/Patient";
-import { createContext } from "react";
-import Navbar from "./components/navbar/Navbar";
 import MainProvider from "./providers";
-
-
-interface UserContextState {
-  logIn: boolean;
-  toggleLogIn?:()=> void;
-}
-
-const defaultState = {
-  logIn: false,
-};
-
-export const UserContext = createContext<UserContextState>(defaultState);
-
-// export function useUserContext() {
-//   return useContext(UserContext);
-// }
-
+import Error404Page from "./pages/404";
+import Verifier from "./pages/Verifier";
+import { useUser } from "./providers/UserProvider";
+import UserSpecificView from "./pages/UserSpecificView";
+import { BrowserRouter, Routes, Route, useNavigate, useLocation } from "react-router-dom";
 
 function App() {
+	const {
+		account: { isDisconnected },
+	} = useUser();
+	const navigate = useNavigate();
+	const location = useLocation();
 
-  const [logIn,setLogIn] = React.useState(defaultState.logIn)
+	useEffect(() => {
+		if (location.pathname === "/app" && isDisconnected) navigate("/");
+	}, [isDisconnected, location]);
 
-  const toggleLogIn = () =>{
-    setLogIn(!logIn)
-  };
- 
-  return (
-    <UserContext.Provider 
-    value={{
-      logIn,
-      toggleLogIn,
-      }}>
-        
-      <BrowserRouter>
-        <main>
-          <Navbar/>
-          <Routes>
-            <Route path="/" element={<Landing />} />
-            <Route path="Verifier" element={<Verifier />} />
-            <Route path="Hospital" element={<Hospital />} />
-            <Route path="Patient" element={<Patient />} />
-          </Routes>
-        </main>
-      </BrowserRouter>
-      </UserContext.Provider>
-  );
+	return (
+		<>
+			<Routes>
+				<Route path="/" element={<Landing />} />
+
+				<Route path="/verifier" element={<Verifier />} />
+
+				<Route path="/app" element={<UserSpecificView />} />
+
+				<Route path="/404" element={<Error404Page />} />
+			</Routes>
+		</>
+	);
 }
 
 function AppWithContext() {
 	return (
-    
-		<MainProvider>
-			<App />
-		</MainProvider>
+		<BrowserRouter>
+			<MainProvider>
+				<App />
+			</MainProvider>
+		</BrowserRouter>
 	);
 }
 
