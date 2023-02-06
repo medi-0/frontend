@@ -7,6 +7,8 @@ import Navbar from "../components/navbar/Navbar";
 import { useUser } from "../providers/UserProvider";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import RegistrationModal from "../components/RegistrationModal/Registration";
+import Lottie from "react-lottie";
+import animationData from "../lib/assets/crypto.json"
 
 // 1. if it is connected
 // 2. read from the contract
@@ -15,63 +17,75 @@ import RegistrationModal from "../components/RegistrationModal/Registration";
 // 5. if the address is registered as a Patient, navigate to the patient page
 
 export default function Landing() {
-	const navigate = useNavigate();
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: animationData,
+    // rendererSettings: {
+    // preserveAspectRatio: "xMidYMid slice"
+    // }
+  };
 
-	const {
-		role: { type },
-		account: { isConnected },
-	} = useUser();
-	const { openConnectModal } = useConnectModal();
-	const [isRegister, setIsRegister] = useState(false);
+  const navigate = useNavigate();
 
-	const onClick = function () {
-		if (isConnected) navigate("/app");
-		else if (openConnectModal) openConnectModal();
-		else console.log("landing button click nothing");
-	};
+  const {
+    role: { type },
+    account: { isConnected },
+  } = useUser();
+  const { openConnectModal } = useConnectModal();
+  const [isRegister, setIsRegister] = useState(false);
 
-	useEffect(() => {
-		if (isConnected && type === UserRole.UNREGISTERED) setIsRegister(true);
-	}, [isConnected, type]);
+  const onClick = function () {
+    if (isConnected) navigate("/app");
+    else if (openConnectModal) openConnectModal();
+    else console.log("landing button click nothing");
+  };
 
-	return (
-		<div
-			className="h-screen flex flex-col"
-			style={{
-				minHeight: "670px",
-			}}
-		>
-			<Navbar />
+  useEffect(() => {
+    if (isConnected && type === UserRole.UNREGISTERED) setIsRegister(true);
+  }, [isConnected, type]);
 
-			{isRegister && <RegistrationModal />}
+  return (
+    <div
+      className="h-screen flex flex-col 
+			bg-[url('../public/Foil.jpg')] bg-no-repeat bg-cover bg-center bg-fixed"
+      style={{
+        minHeight: "670px",
+      }}
+    >
+      <Navbar />
 
-			<div className="flex items-center justify-around px-32 flex-1">
-				<div className="">
-					<h1 className="font-black text-transparent text-7xl bg-clip-text bg-gradient-to-r from-purple-500 to-orange-300">
-						Protect your privacy <br />
-						at all cost with <br />
-						Zk Form
-					</h1>
-					<br />
-					<h1 className="text-[#81AFDD] font-bold text-lg">
-						Share the information that you want safely by <br />
-						using Zero Knowledge Proof
-					</h1>
+      {isRegister && <RegistrationModal />}
 
-					<Button
-						paddingX="1.5rem"
-						marginTop="1.5rem"
-						colorScheme="purple"
-						onClick={onClick}
-					>
-						{isConnected ? "Open app" : "Log in"}
-					</Button>
-				</div>
+      <div className="flex items-center justify-around px-32 flex-1">
+        <div className="">
+          <h1 className="font-black text-transparent text-8xl bg-clip-text bg-gradient-to-r from-purple-500 to-orange-300">
+            Protect your
+            <br />
+            medical privacy
+            <br />
+            at all cost
+          </h1>
+          <br />
+          <h1 className="text-[#81AFDD] font-bold text-lg">
+            Share the information that you want safely by <br />
+            using Zero Knowledge Proof
+          </h1>
 
-				<div>
-					<img className="" src={img} alt="" width={700} height={700} />
-				</div>
-			</div>
-		</div>
-	);
+          <Button
+            paddingX="1.5rem"
+            marginTop="1.5rem"
+            colorScheme="purple"
+            onClick={onClick}
+          >
+            {isConnected ? "Open app" : "Log in"}
+          </Button>
+        </div>
+
+        <div className="h-[700px]">
+          <Lottie options={defaultOptions} />
+        </div>
+      </div>
+    </div>
+  );
 }

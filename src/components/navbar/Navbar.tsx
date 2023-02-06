@@ -18,7 +18,7 @@ function Navbar() {
 			<div className="flex items-center">
 				<button
 					onClick={() => navigate("/Verifier")}
-					className="text-lg text-[#396AEB] mr-8 hover:underline"
+					className="text-xl font-bold text-[#396AEB] mr-8 hover:underline"
 				>
 					Verify
 				</button>
