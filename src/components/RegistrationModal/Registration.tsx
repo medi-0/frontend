@@ -39,8 +39,9 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { Description } from "@ethersproject/properties";
 import { url } from "inspector";
-import { useMediCoreContract } from "../../lib/hooks/useMediCoreContract";
+
 import { ContractTransaction } from "ethers";
+import { useMediCoreContract } from "../../lib/hooks/useMediCoreContract";
 
 // interface Result {
 //   jsonrpc: string;
@@ -164,7 +165,6 @@ function RegistrationModal() {
     // navigate("/Patient");
     // onFirstClose();
   };
-
 
   const { address } = useAccount();
 
