@@ -2,7 +2,8 @@ import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import { PropsWithChildren } from "react";
 
 const client = new ApolloClient({
-	uri: "https://api.studio.thegraph.com/query/41674/commitment-indexer/1",
+	// this is for goerli contract
+	uri: "https://api.studio.thegraph.com/query/41674/commitment-indexer/2",
 	cache: new InMemoryCache(),
 });
 

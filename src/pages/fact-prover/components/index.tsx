@@ -1,3 +1,3 @@
-import Modal from "./Modal";
+import GenerateProofModal from "./GenerateProofModal";
 
-export { Modal };
+export { GenerateProofModal };

@@ -1,10 +1,9 @@
+import { useEffect } from "react";
+import { Grid, Spinner } from "@chakra-ui/react";
 import { DocumentNode, useQuery } from "@apollo/client";
-import { Grid, Progress, Spinner } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { useSimpleQuery } from "../lib/hooks/useSimpleQuery";
-import { CommittedMedicalDocumentHeader } from "../lib/types";
-import { usePatientModal } from "../pages/fact-prover/PatientModalContext";
+
 import DocCard from "./CommittedDocCard";
+import { CommittedMedicalDocumentHeader } from "../lib/types";
 
 interface ContainerProps {
 	address: `0x${string}`;
@@ -17,7 +16,7 @@ const placeholderData: CommittedMedicalDocumentHeader[] = [
 	{
 		blockNumber: 12124,
 		blockTimestamp: 1675387235,
-		cid: "bafybeidhbad6lkwhfabbx57ktyco6spwv36atl4ukzmzbjqg2aqkhwmaiu",
+		cid: "bafybeiaohg4e3f3u3tf5kizc4aknrulplkfuzzbo4mqrudtegljebpryay",
 		fileName: "Document 1",
 		hash: "0x123125123",
 		hospital: "0x19381984917823",
@@ -53,7 +52,12 @@ type QueryResponse = {
 	commitedMedicalDocuments: CommittedMedicalDocumentHeader[];
 };
 
-function DocumentListContainer({ address, query, onClick, onChange }: ContainerProps) {
+function CommittedDocListContainer({
+	address,
+	query,
+	onClick,
+	onChange,
+}: ContainerProps) {
 	const { loading, error, data } = useQuery<QueryResponse>(query, {
 		variables: {
 			address,
@@ -63,7 +67,7 @@ function DocumentListContainer({ address, query, onClick, onChange }: ContainerP
 	useEffect(() => {
 		if (!data) return;
 		onChange(data.commitedMedicalDocuments.length);
-		console.log("gql data", data);
+		// console.log("gql data", data);
 	}, [data]);
 
 	return loading ? (
@@ -72,7 +76,7 @@ function DocumentListContainer({ address, query, onClick, onChange }: ContainerP
 			<div>Fetching your documents...</div>
 		</div>
 	) : (
-		<DocumentList
+		<CommittedDocList
 			docs={placeholderData || data?.commitedMedicalDocuments || []}
 			onClick={onClick}
 		/>
@@ -84,7 +88,7 @@ interface Props {
 	onClick: (doc: CommittedMedicalDocumentHeader) => void;
 }
 
-function DocumentList({ docs, onClick }: Props) {
+function CommittedDocList({ docs, onClick }: Props) {
 	return (
 		<Grid
 			borderTop="1px solid #A3A3A3"
@@ -94,10 +98,16 @@ function DocumentList({ docs, onClick }: Props) {
 			className="h-full flex-1 overflow-y-scroll"
 		>
 			{docs.map((item) => (
-				<DocCard data={item} onClick={() => onClick(item)} />
+				<DocCard
+					data={item}
+					onClick={() => {
+						onClick(item);
+					}}
+					key={item.cid}
+				/>
 			))}
 		</Grid>
 	);
 }
 
-export default DocumentListContainer;
+export default CommittedDocListContainer;

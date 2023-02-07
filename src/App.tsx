@@ -16,7 +16,7 @@ function App() {
 
 	useEffect(() => {
 		if (location.pathname === "/app" && isDisconnected) navigate("/");
-	}, [isDisconnected, location]);
+	}, [isDisconnected, location, navigate]);
 
 	return (
 		<>

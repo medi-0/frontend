@@ -44,3 +44,6 @@ export interface CommittedMedicalDocumentHeader {
 	blockTimestamp: number;
 	transactionHash: string;
 }
+
+export type FullCommittedDocumentData = Omit<DocWithCID, "cid"> &
+	Omit<CommittedMedicalDocumentHeader, "fileName" | "hospital" | "patient">;

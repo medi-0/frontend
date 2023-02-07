@@ -5,9 +5,9 @@ export function useMediCoreContract() {
 
 	const contract = useContract({
 		// GOERli
-		// address: "0x26E13eBfAef30076171dd77F91aFCa75592E0050",
+		address: "0x26E13eBfAef30076171dd77F91aFCa75592E0050",
 		// MUMBAI
-		address: "0x8f6eB3281505dBfa9Fe947c903B2E30c416CAC5a",
+		// address: "0x8f6eB3281505dBfa9Fe947c903B2E30c416CAC5a",
 		abi: [
 			{
 				inputs: [],

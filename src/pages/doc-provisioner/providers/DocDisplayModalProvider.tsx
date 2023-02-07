@@ -5,17 +5,17 @@ import {
 	createContext,
 	PropsWithChildren,
 } from "react";
-import { CIDString } from "web3.storage";
+import { CommittedMedicalDocumentHeader } from "../../../lib/types";
 
 interface IDocDisplayModalContext {
-	cid: CIDString | null;
+	doc: CommittedMedicalDocumentHeader | null;
 	isOpen: boolean;
 	onClose: () => void;
-	onOpen: (cid: CIDString) => void;
+	onOpen: (doc: CommittedMedicalDocumentHeader) => void;
 }
 
 export const DocDisplayModalContext = createContext<IDocDisplayModalContext>({
-	cid: null,
+	doc: null,
 	isOpen: false,
 	onOpen: () => {},
 	onClose: () => {},
@@ -29,10 +29,10 @@ export const DocDisplayModalProvider: React.FC<PropsWithChildren> = function ({
 	children,
 }) {
 	const [isOpen, setIsOpen] = useState(false);
-	const [cid, setCid] = useState<CIDString | null>(null);
+	const [doc, setDoc] = useState<CommittedMedicalDocumentHeader | null>(null);
 
-	const onOpen = useCallback((cid: CIDString) => {
-		setCid(cid);
+	const onOpen = useCallback((doc: CommittedMedicalDocumentHeader) => {
+		setDoc(doc);
 		setIsOpen(true);
 	}, []);
 	const onClose = useCallback(() => setIsOpen(false), []);
@@ -40,7 +40,7 @@ export const DocDisplayModalProvider: React.FC<PropsWithChildren> = function ({
 	return (
 		<DocDisplayModalContext.Provider
 			value={{
-				cid,
+				doc,
 				isOpen,
 				onOpen,
 				onClose,

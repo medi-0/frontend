@@ -1,5 +1,5 @@
 import { Button, ModalBody, ModalFooter, Spinner } from "@chakra-ui/react";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { humanFileSize, parsePdf, processText } from "../../../../lib/utils";
 import Dropzone, { DropEvent, FileRejection } from "react-dropzone";
 import { ReactComponent as FileIcon } from "../../../../lib/assets/svg/file.svg";

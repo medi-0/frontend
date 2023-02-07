@@ -1,9 +1,9 @@
 import { CIDString } from "web3.storage";
-import { useCallback, useEffect, useRef, useState } from "react";
 import { Badge, ModalBody, Progress } from "@chakra-ui/react";
+import { useEffect, useRef, useState } from "react";
 import { TransactionReceipt } from "@ethersproject/abstract-provider";
+
 import { ReactComponent as OpenLinkIcon } from "../../../../lib/assets/svg/open-link.svg";
-import DotsLoader from "../../../../components/DotsLoader";
 
 interface Props {
 	ipfsData: CIDString | null;
@@ -25,55 +25,39 @@ export function CommitmentProgress({
 	const textRef = useRef<HTMLDivElement | null>(null);
 	const [isAnimated, setIsAnimated] = useState(true);
 
-	const getCommitmentProgressText = useCallback(() => {
-		if (!textRef.current) return;
-
-		if (commitmentIsLoading) return <DotsLoader text="Committing document" />;
-		if (ipfsIsLoading) return <DotsLoader text="Uploading to IPFS" />;
-		if (ipfsData && commitmentData) return <>Document submitted successfully.</>;
-		if (ipfsIsError || commitmentIsError) return <>Something went wrong.</>;
-	}, [
-		commitmentIsLoading,
-		ipfsIsLoading,
-		ipfsData,
-		commitmentData,
-		ipfsIsError,
-		commitmentIsError,
-	]);
-
 	useEffect(() => {
 		console.log("should be animated?", isAnimated);
 	}, [isAnimated]);
 
-	// useEffect(() => {
-	// 	if (!textRef.current) return;
-	// 	if (commitmentIsLoading) textRef.current.textContent = "Committing document...";
-	// }, [commitmentIsLoading]);
+	useEffect(() => {
+		if (!textRef.current) return;
+		if (commitmentIsLoading) textRef.current.textContent = "Committing document...";
+	}, [commitmentIsLoading]);
 
-	// useEffect(() => {
-	// 	if (!textRef.current) return;
-	// 	if (ipfsIsLoading) textRef.current.textContent = "Uploading to IPFS...";
-	// }, [ipfsIsLoading]);
+	useEffect(() => {
+		if (!textRef.current) return;
+		if (ipfsIsLoading) textRef.current.textContent = "Uploading to IPFS...";
+	}, [ipfsIsLoading]);
 
 	useEffect(() => {
 		if (!textRef.current) return;
 		if (ipfsData && commitmentData) {
 			setIsAnimated(false);
-			// textRef.current.textContent = "Document submitted successfully.";
+			textRef.current.textContent = "Document submitted successfully.";
 		}
 	}, [ipfsData, commitmentData]);
 
-	// useEffect(() => {
-	// 	if (!textRef.current) return;
-	// 	if (ipfsIsError || commitmentIsError)
-	// 		textRef.current.textContent = "Something went wrong.";
-	// }, [ipfsIsError, commitmentIsError]);
+	useEffect(() => {
+		if (!textRef.current) return;
+		if (ipfsIsError || commitmentIsError)
+			textRef.current.textContent = "Something went wrong.";
+	}, [ipfsIsError, commitmentIsError]);
 
 	return (
 		<>
 			<ModalBody
 				className="flex flex-col h-72"
-				minH="250px"
+				minH="200px"
 				paddingX="0"
 				paddingY="1.2rem"
 			>
@@ -82,10 +66,7 @@ export function CommitmentProgress({
 						className="text-sm flex-1 font-semibold flex items-center justify-center"
 						ref={textRef}
 					>
-						{/* In progress... */}
-						{/* <DotsLoader text="In progress" /> */}
-						{/* {getCommitmentProgressText()} */}
-						<DotsLoader text="Uploading to IPFS" />
+						In progress...
 					</div>
 
 					<Progress
@@ -114,6 +95,7 @@ export function CommitmentProgress({
 								<div className="flex hover:underline items-center">
 									<a
 										target="_blank"
+										rel="noreferrer"
 										href={`https://${ipfsData}.ipfs.w3s.link/`}
 										className="w-[200px] whitespace-nowrap overflow-hidden text-ellipsis"
 									>
@@ -143,7 +125,8 @@ export function CommitmentProgress({
 								<div className="flex hover:underline items-center">
 									<a
 										target="_blank"
-										href={`https://mumbai.polygonscan.com/tx/${commitmentData.transactionHash}`}
+										rel="noreferrer"
+										href={`https://goerli.etherscan.io/tx/${commitmentData.transactionHash}`}
 										className="w-[200px] whitespace-nowrap overflow-hidden text-ellipsis"
 									>
 										{commitmentData.transactionHash}

@@ -10,21 +10,24 @@ import { useMainModalContext } from "../../providers/ModalProvider";
 import {
 	DocDisplayModalProvider,
 	useDocDisplayModal,
-} from "./providers/DocModalProvider";
+} from "./providers/DocDisplayModalProvider";
 import DocDisplayModal from "./components/DocDisplayModal";
 
 function DocProvisionerView() {
-	const { isOpen, onOpen } = useDocDisplayModal();
+	const { onOpen } = useDocDisplayModal();
 
 	const { address } = useAccount();
 	const counterRef = useRef<HTMLSpanElement | null>(null);
 
 	const modalContext = useMainModalContext();
 
-	const handleCardClick = useCallback((doc: CommittedMedicalDocumentHeader) => {
-		console.log("card clicked", doc.cid);
-		onOpen(doc.cid);
-	}, []);
+	const handleCardClick = useCallback(
+		(doc: CommittedMedicalDocumentHeader) => {
+			console.log("card clicked", doc.cid);
+			onOpen(doc);
+		},
+		[onOpen]
+	);
 
 	const handleListChange = useCallback((count: number) => {
 		if (!counterRef.current) return;
@@ -74,8 +77,10 @@ function DocProvisionerView() {
 				onChange={() => handleListChange(3)}
 			/>
 			<UploadInitButton onClick={modalContext.onOpen} />
-			<DocSubmissionModal />
+
 			<DocDisplayModal />
+
+			<DocSubmissionModal />
 		</>
 	);
 }

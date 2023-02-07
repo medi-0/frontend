@@ -10,9 +10,7 @@ import { Field, fieldsFromJSON } from "../../../../lib/utils";
 import { useCallback } from "react";
 import PdfUploadForm from "./PdfUploadForm";
 import { useState } from "react";
-import { useDocUploadIpfs } from "../../../../lib/hooks/useDocUploadIpfs";
 import { useDocCommitment } from "../../../../lib/hooks/useDocCommitment";
-import { Doc } from "../../../../lib/types";
 import { CommitmentProgress } from "./CommitmentProgress";
 
 type ModalPhase = "UPLOAD" | "SUBMISSION" | "COMMITMENT";
@@ -33,7 +31,6 @@ function DocSubmissionModal() {
 	const [phase, setPhase] = useState<ModalPhase>("UPLOAD");
 
 	const { upload, commitment } = useDocCommitment();
-	// const { upload, isLoading, cid, isError } = useDocUploadIpfs();
 
 	const handlePdfUploadFormSubmit = useCallback(async function (processedText: string) {
 		setFields(fieldsFromJSON(processedText));
@@ -52,7 +49,7 @@ function DocSubmissionModal() {
 				fields,
 			});
 		},
-		[]
+		[commitment]
 	);
 
 	return (
@@ -79,20 +76,20 @@ function DocSubmissionModal() {
 				<span className="font-bold text-white">close</span>
 			</ModalCloseButton>
 
-			{/* {phase === "SUBMISSION" ? (
+			{phase === "SUBMISSION" ? (
 				<EditableForm initialFields={fields} onSubmit={handleDocSubmit} />
 			) : phase === "UPLOAD" ? (
 				<PdfUploadForm onSubmit={handlePdfUploadFormSubmit} />
-			) : ( */}
-			<CommitmentProgress
-				ipfsData={upload.cid}
-				ipfsIsError={upload.isError}
-				ipfsIsLoading={upload.isLoading}
-				commitmentData={commitment.receipt}
-				commitmentIsError={commitment.isError}
-				commitmentIsLoading={commitment.isLoading}
-			/>
-			{/* )} */}
+			) : (
+				<CommitmentProgress
+					ipfsData={upload.cid}
+					ipfsIsError={upload.isError}
+					ipfsIsLoading={upload.isLoading}
+					commitmentData={commitment.receipt}
+					commitmentIsError={commitment.isError}
+					commitmentIsLoading={commitment.isLoading}
+				/>
+			)}
 		</ModalContent>
 	);
 }

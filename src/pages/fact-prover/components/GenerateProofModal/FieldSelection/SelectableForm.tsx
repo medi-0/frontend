@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
-import { DocWithCID } from "../../../../lib/types";
+import { FullCommittedDocumentData } from "../../../../../lib/types";
 import { Button, ModalBody, ModalFooter } from "@chakra-ui/react";
+import { DocHeader } from "../../../../../components/DocHeader";
 
 interface Field {
 	key: string;
@@ -54,7 +55,7 @@ function SelectableFormInput({
 }
 
 interface SelectableFormProps {
-	doc: DocWithCID;
+	doc: FullCommittedDocumentData;
 	onSubmit: (data: Field[]) => void;
 }
 
@@ -76,28 +77,28 @@ export default function SelectableForm({ doc, onSubmit }: SelectableFormProps) {
 
 	return (
 		<>
-			<ModalBody className="flex flex-col  h-72" padding="1rem 1.2rem">
-				<div className="border border-zinc-400 rounded-md p-3 mb-6 ">
-					<div>
-						<span>Doc name : </span>
-						<span>{doc.docName}</span>
-					</div>
-					<div>
-						<span>Hospital address : </span>
-						<span>{doc.hospitalAddress}</span>
-					</div>
-					<div>
-						<span>Hospital name : </span>
-						<span>{doc.hospitalName}</span>
-					</div>
+			<ModalBody className="flex flex-col h-72" paddingX="0" paddingBottom="1rem">
+				<div>
+					<DocHeader
+						cid={doc.cid}
+						fileHash={doc.hash}
+						filename={doc.docName}
+						timestamp={doc.blockTimestamp}
+						hospitalName={doc.hospitalName}
+						patientAddress={doc.patientAddress}
+						hospitalAddress={doc.hospitalAddress}
+						type="HOSPITAL"
+					/>
+					<hr className="border-neutral-700 mt-3 mb-5" />
 				</div>
-				<div className="flex gap-2.5 text-xs font-semibold mb-3  ">
-					<div className="px-2 flex-[3]">Key</div>
-					<div className="px-2 flex-[6]">Value</div>
+
+				<div className="flex gap-2.5 text-xs mb-3  ">
+					<div className="px-2 flex-[3] font-semibold">Key</div>
+					<div className="px-2 flex-[6] font-semibold">Value</div>
 					<div className="px-2 flex-1"></div>
 				</div>
 
-				{fields.length != 0 ? (
+				{fields.length !== 0 ? (
 					<div
 						className="flex flex-col flex-1 gap-1.5 overflow-scroll h-full"
 						key={fields.length}
