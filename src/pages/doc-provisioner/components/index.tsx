@@ -1,3 +1,4 @@
-import Modal from "./Modal/index";
+import DocDisplayModal from "./DocDisplayModal";
+import DocSubmissionModal from "./DocSubmissionModal/index";
 
-export { Modal };
+export { DocSubmissionModal, DocDisplayModal };
