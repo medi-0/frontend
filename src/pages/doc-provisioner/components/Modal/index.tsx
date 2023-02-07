@@ -13,8 +13,9 @@ import PdfUploadForm from "./PdfUploadForm";
 import { useState } from "react";
 import { useDocUploadIpfs } from "../../../../lib/hooks/useDocUploadIpfs";
 import { DocCommitment } from "./DocUploadIpfs";
-import { useDocCommitment } from "../../../../lib/hooks/useDocCommitment";
+
 import { Doc } from "../../../../lib/types";
+import { useDocCommitment } from "../../../../lib/hooks/useDocCommitment";
 
 type ModalPhase = "UPLOAD" | "SUBMISSION" | "COMMITMENT";
 

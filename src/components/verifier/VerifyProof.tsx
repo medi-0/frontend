@@ -86,6 +86,8 @@ export function VerifyForm() {
     });
   };
 
+
+
   if (!isConnected)
     return (
       <Center>
@@ -163,11 +165,11 @@ export function VerifyForm() {
                         </Text>
                       </Box>
                       <Box>
-                        <Text pt="2" fontSize="sm">
+                       
                           {file.selectedRows.map((file1) => {
                             return (
                               <>
-                              <Stack divider={<StackDivider />} spacing="4">
+                                <Stack divider={<StackDivider />} spacing="4">
                                   <Box>
                                     <Heading
                                       size="xs"
@@ -191,17 +193,19 @@ export function VerifyForm() {
                                     </Text>
                                   </Box>
                                   <Box>
-                                  <Heading size="xs" textTransform="uppercase">
-                                    Generated Proof
-                                  </Heading>
-                                  <Accordion allowToggle>
-                                    <AccordionItem borderColor={"white"}>
-                                      <h2>
+                                    <Heading
+                                      size="xs"
+                                      textTransform="uppercase"
+                                    >
+                                      Generated Proof
+                                    </Heading>
+                                    <Accordion allowToggle>
+                                      <AccordionItem borderColor={"white"}>
                                         <AccordionButton>
                                           <Box
-                                            // as="span"
-                                            // flex="1"
-                                            // textAlign="left"
+                                          // as="span"
+                                          // flex="1"
+                                          // textAlign="left"
                                           >
                                             <Heading
                                               size="xs"
@@ -213,18 +217,17 @@ export function VerifyForm() {
                                           </Box>
                                           <AccordionIcon />
                                         </AccordionButton>
-                                      </h2>
-                                      <AccordionPanel pb={4}>
-                                        {file1.proof.toString()}
-                                      </AccordionPanel>
-                                    </AccordionItem>
-                                  </Accordion>
+                                        <AccordionPanel pb={4}>
+                                          {file1.proof.toString()}
+                                        </AccordionPanel>
+                                      </AccordionItem>
+                                    </Accordion>
                                   </Box>
                                 </Stack>
                               </>
                             );
                           })}
-                        </Text>
+                     
                       </Box>
                     </Stack>
                   </CardBody>
