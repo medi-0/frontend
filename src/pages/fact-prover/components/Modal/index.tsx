@@ -9,7 +9,7 @@ import {
 import { useCallback, useEffect } from "react";
 import { useDocFetchIpfs } from "../../../../lib/hooks/useDocFetchIpfs";
 import { Field } from "../../../../lib/utils";
-import { useMainModalContext } from "../../../../providers/MainModalContext";
+import { useMainModalContext } from "../../../../providers/ModalProvider";
 import { usePatientModal } from "../../PatientModalContext";
 import SelectableForm from "./SelectableForm";
 

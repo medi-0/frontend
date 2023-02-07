@@ -5,7 +5,7 @@ import { gql } from "@apollo/client";
 import { Modal } from "./components";
 import { useCallback, useRef } from "react";
 import { CommittedMedicalDocumentHeader } from "../../lib/types";
-import { useMainModalContext } from "../../providers/MainModalContext";
+import { useMainModalContext } from "../../providers/ModalProvider";
 import { PatientModalProvider, usePatientModal } from "./PatientModalContext";
 
 export default function PatientViewContainer() {

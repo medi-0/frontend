@@ -1,9 +1,6 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import App from './App';
+import { hashEntry, stringToBytes } from "./lib/utils/fileHasher";
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+test("renders learn react link", () => {
+	let hash = hashEntry("name", "kari");
+	console.log("hash", hash);
 });

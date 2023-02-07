@@ -7,7 +7,7 @@ import {
 	useState,
 } from "react";
 import { CIDString } from "web3.storage";
-import { useMainModalContext } from "../../providers/MainModalContext";
+import { useMainModalContext } from "../../providers/ModalProvider";
 
 interface IPatientModalContext {
 	state: {

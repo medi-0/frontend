@@ -3,12 +3,19 @@ import UploadInitButton from "../../components/UploadInitButton";
 
 import { useAccount } from "wagmi";
 import { gql } from "@apollo/client";
-import { Modal } from "./components";
+import { DocSubmissionModal } from "./components";
 import { useCallback, useRef } from "react";
 import { CommittedMedicalDocumentHeader } from "../../lib/types";
-import { useMainModalContext } from "../../providers/MainModalContext";
+import { useMainModalContext } from "../../providers/ModalProvider";
+import {
+	DocDisplayModalProvider,
+	useDocDisplayModal,
+} from "./providers/DocModalProvider";
+import DocDisplayModal from "./components/DocDisplayModal";
 
 function DocProvisionerView() {
+	const { isOpen, onOpen } = useDocDisplayModal();
+
 	const { address } = useAccount();
 	const counterRef = useRef<HTMLSpanElement | null>(null);
 
@@ -16,6 +23,7 @@ function DocProvisionerView() {
 
 	const handleCardClick = useCallback((doc: CommittedMedicalDocumentHeader) => {
 		console.log("card clicked", doc.cid);
+		onOpen(doc.cid);
 	}, []);
 
 	const handleListChange = useCallback((count: number) => {
@@ -66,9 +74,18 @@ function DocProvisionerView() {
 				onChange={() => handleListChange(3)}
 			/>
 			<UploadInitButton onClick={modalContext.onOpen} />
-			<Modal />
+			<DocSubmissionModal />
+			<DocDisplayModal />
 		</>
 	);
 }
 
-export default DocProvisionerView;
+function DocProvisionerViewWithContext() {
+	return (
+		<DocDisplayModalProvider>
+			<DocProvisionerView />
+		</DocDisplayModalProvider>
+	);
+}
+
+export default DocProvisionerViewWithContext;

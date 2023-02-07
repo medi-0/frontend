@@ -1,6 +1,6 @@
-import { Button, ModalBody, ModalFooter } from "@chakra-ui/react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { DocWithCID } from "../../../../lib/types";
+import { Button, ModalBody, ModalFooter } from "@chakra-ui/react";
 
 interface Field {
 	key: string;
@@ -61,10 +61,6 @@ interface SelectableFormProps {
 export default function SelectableForm({ doc, onSubmit }: SelectableFormProps) {
 	const [fields] = useState<Field[]>(doc.fields);
 	const [selectedFieldIndex, setSelectedFieldIndex] = useState<number[]>([]);
-
-	// useEffect(() => {
-	// 	console.log("selected generating proof modal", selectedFieldIndex);
-	// }, [selectedFieldIndex]);
 
 	const onSelectField = useCallback((idx: number) => {
 		setSelectedFieldIndex((prev) => {

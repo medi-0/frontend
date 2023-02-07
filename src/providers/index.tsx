@@ -1,7 +1,7 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import { PropsWithChildren } from "react";
 import { GraphQLProvider } from "./GraphQLProvider";
-import { ModelContextProvider } from "./MainModalContext";
+import { ModelContextProvider } from "./ModalProvider";
 import { UserProvider } from "./UserProvider";
 import { WagmiProvider } from "./WagmiProvider";
 
