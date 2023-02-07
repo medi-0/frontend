@@ -8,7 +8,7 @@ import { useUser } from "../providers/UserProvider";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import RegistrationModal from "../components/RegistrationModal/Registration";
 import Lottie from "react-lottie";
-import animationData from "../lib/assets/crypto.json"
+import animationData from "../lib/assets/document.json"
 
 // 1. if it is connected
 // 2. read from the contract
@@ -47,8 +47,8 @@ export default function Landing() {
 
   return (
     <div
-      className="h-screen flex flex-col 
-			bg-[url('../public/Foil.jpg')] bg-no-repeat bg-cover bg-center bg-fixed"
+      className="h-screen flex flex-col" 
+			// bg-[url('../public/blueSky.jpg')] bg-no-repeat bg-cover bg-center bg-fixed
       style={{
         minHeight: "670px",
       }}
@@ -82,7 +82,7 @@ export default function Landing() {
           </Button>
         </div>
 
-        <div className="h-[700px]">
+        <div className="h-[400px]">
           <Lottie options={defaultOptions} />
         </div>
       </div>
