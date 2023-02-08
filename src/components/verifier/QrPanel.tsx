@@ -14,6 +14,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import QrReader from "react-qr-reader";
 
+
+
 export default function QrPanel() {
   // const {docs, fetchFiles } = useDocFetchIpfs();
   // const handleFetch = () => {
