@@ -46,6 +46,11 @@ export default function QrPanel() {
     alert(err);
   };
 
+  function handleClick() {
+    fetchData()
+    onClose()
+  }
+
   return (
     <div>
       <Button onClick={onOpen}>Open Modal</Button>
@@ -56,7 +61,7 @@ export default function QrPanel() {
           <ModalHeader>Modal Title</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <div>
+            <div className="flex justify-center items-center">
               <div className="border border-solid w-80">
                 <QrReader
                   delay={300}
@@ -66,14 +71,13 @@ export default function QrPanel() {
                   facingMode="environment"
                 />
                 <p>{result}</p>
+                {/* <button onClick={fetchData}>Handle Fetch</button> */}
               </div>
-
-              <button onClick={fetchData}>Handle Fetch</button>
             </div>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
-              Close
+            <Button colorScheme="blue" mr={3} onClick={handleClick} >
+              Generate proof
             </Button>
           </ModalFooter>
         </ModalContent>
