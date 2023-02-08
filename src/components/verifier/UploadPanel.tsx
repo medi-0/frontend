@@ -19,6 +19,8 @@ import {
 } from "@chakra-ui/react";
 
 import { useAccount } from "wagmi";
+import QrModal from "./QrPanel";
+import TabModal from "./TabModal";
 
 // import { FileHasherProps } from "../../file-hasher-types";
 // import { FileHash__factory } from "../../typechain-types";
@@ -37,7 +39,7 @@ export interface JsonFileContentType {
   selectedRows: selectedRows[];
 }
 
-export function VerifyForm() {
+export function UploadPanel() {
   const { address, isConnected, connector } = useAccount();
   const toast = useToast();
   const { isOpen, onToggle } = useDisclosure();
@@ -86,8 +88,6 @@ export function VerifyForm() {
     });
   };
 
-
-
   if (!isConnected)
     return (
       <Center>
@@ -95,77 +95,77 @@ export function VerifyForm() {
       </Center>
     );
   return (
-    <>
-      <Input
-        type="file"
-        sx={{
-          padding: "10px",
-          height: "auto",
-          "::file-selector-button": {
-            border: "none",
-            outline: "none",
+    <div>
+      <div>
+        <Input
+          type="file"
+          sx={{
+            padding: "10px",
             height: "auto",
-            mr: 2,
-            ...styles,
-          },
-        }}
-        disabled={!isConnected}
-        onChange={uploadFile}
-      />
+            "::file-selector-button": {
+              border: "none",
+              outline: "none",
+              height: "auto",
+              mr: 2,
+              ...styles,
+            },
+          }}
+          disabled={!isConnected}
+          onChange={uploadFile}
+        />
 
-      {jsonFileContent ? (
-        jsonFileContent.map((file) => {
-          // print file contents
-          file.selectedRows.map((file1) => {
-            // console.log(file1.selectedKey);
-            // console.log(file1.selectedValue);
-            const proofStr = file1.proof.toString().slice(0, 10) + "...";
+        {jsonFileContent ? (
+          jsonFileContent.map((file) => {
+            // print file contents
+            file.selectedRows.map((file1) => {
+              // console.log(file1.selectedKey);
+              // console.log(file1.selectedValue);
+              const proofStr = file1.proof.toString().slice(0, 10) + "...";
 
-            console.log(`proof: ${proofStr}`);
-          });
-          return (
-            <>
-              <Box mt="2" mb="2">
-                <Card>
-                  <CardHeader>
-                    <Heading size="md">Proof</Heading>
-                  </CardHeader>
-                  <CardBody>
-                    <Stack divider={<StackDivider />} spacing="4">
-                      <Box>
-                        <Heading size="xs" textTransform="uppercase">
-                          Verifier Address
-                        </Heading>
-                        <Text pt="2" fontSize="sm">
-                          {address}
-                        </Text>
-                      </Box>
-                      <Box>
-                        <Heading size="xs" textTransform="uppercase">
-                          Address
-                        </Heading>
-                        <Text pt="2" fontSize="sm">
-                          {file.address}
-                        </Text>
-                      </Box>
-                      <Box>
-                        <Heading size="xs" textTransform="uppercase">
-                          Cert Name
-                        </Heading>
-                        <Text pt="2" fontSize="sm">
-                          {file.certName}
-                        </Text>
-                      </Box>
-                      <Box>
-                        <Heading size="xs" textTransform="uppercase">
-                          Cert Hash
-                        </Heading>
-                        <Text pt="2" fontSize="sm">
-                          {file.certHash}
-                        </Text>
-                      </Box>
-                      <Box>
-                       
+              console.log(`proof: ${proofStr}`);
+            });
+            return (
+              <>
+                <Box mt="2" mb="2">
+                  <Card>
+                    <CardHeader>
+                      <Heading size="md">Proof</Heading>
+                    </CardHeader>
+                    <CardBody>
+                      <Stack divider={<StackDivider />} spacing="4">
+                        <Box>
+                          <Heading size="xs" textTransform="uppercase">
+                            Verifier Address
+                          </Heading>
+                          <Text pt="2" fontSize="sm">
+                            {address}
+                          </Text>
+                        </Box>
+                        <Box>
+                          <Heading size="xs" textTransform="uppercase">
+                            Address
+                          </Heading>
+                          <Text pt="2" fontSize="sm">
+                            {file.address}
+                          </Text>
+                        </Box>
+                        <Box>
+                          <Heading size="xs" textTransform="uppercase">
+                            Cert Name
+                          </Heading>
+                          <Text pt="2" fontSize="sm">
+                            {file.certName}
+                          </Text>
+                        </Box>
+                        <Box>
+                          <Heading size="xs" textTransform="uppercase">
+                            Cert Hash
+                          </Heading>
+                          <Text pt="2" fontSize="sm">
+                            {file.certHash}
+                          </Text>
+                        </Box>
+                        <Box>
                           {file.selectedRows.map((file1) => {
                             return (
                               <>
@@ -227,18 +227,18 @@ export function VerifyForm() {
                               </>
                             );
                           })}
-                     
-                      </Box>
-                    </Stack>
-                  </CardBody>
-                </Card>
-              </Box>
-            </>
-          );
-        })
-      ) : (
-        <></>
-      )}
-    </>
+                        </Box>
+                      </Stack>
+                    </CardBody>
+                  </Card>
+                </Box>
+              </>
+            );
+          })
+        ) : (
+          <></>
+        )}
+      </div>
+    </div>
   );
-}
+};
