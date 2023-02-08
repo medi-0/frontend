@@ -8,13 +8,13 @@ import {
   ModalCloseButton,
   Button,
   useDisclosure,
+  Box,
+  Card,
 } from "@chakra-ui/react";
 
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import QrReader from "react-qr-reader";
-
-
 
 export default function QrPanel() {
   // const {docs, fetchFiles } = useDocFetchIpfs();
@@ -23,6 +23,7 @@ export default function QrPanel() {
   //   fetch(result).then(res => res.json()).then(data => console.log(data))
   // };
 
+  const [showButton, setShowButton] = useState(false);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -47,13 +48,14 @@ export default function QrPanel() {
   };
 
   function handleClick() {
-    fetchData()
-    onClose()
+    setShowButton(true);
+    fetchData();
+    onClose();
   }
 
   return (
     <div>
-      <Button onClick={onOpen}>Open Modal</Button>
+      <Button onClick={onOpen}>Click to scan QR</Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -76,21 +78,32 @@ export default function QrPanel() {
             </div>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={handleClick} >
+            <Button colorScheme="blue" mr={3} onClick={handleClick}>
               Generate proof
             </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
+
       <div>
-        {posts.map((post) => (
-          <div key={post.id}>
-            <h5 className="text-center font-bold">{post.title}</h5>
-            <p className="text-center">{post.body}</p>
-            <br />
-          </div>
-        ))}
+        <Card>
+          {posts.map((post) => (
+            <div key={post.id}>
+              <h5 className="text-center font-bold">{post.title}</h5>
+              <p className="text-center">{post.body}</p>
+              <br />
+            </div>
+          ))}
+        </Card>
       </div>
+      {showButton && (
+        <button
+          className="border boder-solid rounded-full 
+      w-[150px] h-[50px] font-bold bg-lime-200 my-[20px]"
+        >
+          Verify Proof
+        </button>
+      )}
     </div>
   );
 }

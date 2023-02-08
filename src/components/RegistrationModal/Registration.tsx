@@ -60,7 +60,7 @@ function RegistrationModal() {
 		contract?.registerAsHospital(name, description).then((tx) => {
 			setTx(tx);
 		});
-
+		
 		// navigate("/Hospital");
 		// onSecondClose();
 	};
@@ -69,7 +69,7 @@ function RegistrationModal() {
 		contract?.registerAsPatient().then((tx) => {
 			setTx(tx);
 		});
-
+		
 		// navigate("/Patient");
 		// onFirstClose();
 	};
@@ -84,7 +84,10 @@ function RegistrationModal() {
 
 	useEffect(() => {
 		console.log("tx completed1", data);
-		// contract?.hasRole()
+		// console.log("my contract",contract);
+		// if (data) navigate("/app");
+
+		
 
 		// if (!contract || !address) return;
 
@@ -103,10 +106,12 @@ function RegistrationModal() {
 		// 	console.log("double", isHospital, isPatient);
 
 		// 	if (isHospital) {
-		// 		navigate("/Hospital");
+		// 		setRole(UserRole.HOSPITAL_ROLE);
+		// 		navigate("/app");
 		// 		console.log("tx completed2", data);
 		// 	} else if (isPatient) {
-		// 		navigate("/Patient");
+		// 		setRole(UserRole.PATIENT_ROLE);
+		// 		navigate("/app");
 		// 		console.log("tx completed2", data);
 		// 	} else {
 		// 	}

@@ -7,7 +7,7 @@ import { UploadPanel} from "./UploadPanel";
 export default function TabModal() {
   return (
     <div>
-      <Tabs variant="soft-rounded" colorScheme="green">
+      <Tabs isLazy>
         <TabList>
           <Tab>Scan Qr Code</Tab>
           <Tab>Upload FIle</Tab>
@@ -16,7 +16,6 @@ export default function TabModal() {
           <TabPanel>
             <QrPanel/>
             
-
           </TabPanel>
           <TabPanel>
             <UploadPanel/>
