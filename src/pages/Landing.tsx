@@ -7,8 +7,7 @@ import Navbar from "../components/navbar/Navbar";
 import { useUser } from "../providers/UserProvider";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import RegistrationModal from "../components/RegistrationModal/Registration";
-import Lottie from "react-lottie";
-import animationData from "../lib/assets/document.json"
+
 
 // 1. if it is connected
 // 2. read from the contract
@@ -17,14 +16,6 @@ import animationData from "../lib/assets/document.json"
 // 5. if the address is registered as a Patient, navigate to the patient page
 
 export default function Landing() {
-  const defaultOptions = {
-    loop: true,
-    autoplay: true,
-    animationData: animationData,
-    // rendererSettings: {
-    // preserveAspectRatio: "xMidYMid slice"
-    // }
-  };
 
   const navigate = useNavigate();
 
@@ -83,7 +74,8 @@ export default function Landing() {
         </div>
 
         <div className="h-[400px]">
-          <Lottie options={defaultOptions} />
+        <img src={img} width={400} height={400} alt="" />
+       
         </div>
       </div>
     </div>
