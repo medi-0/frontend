@@ -1,15 +1,28 @@
-// import { generate_row_hash } from "file-hasher";
+import axios from "axios";
 
-// export function hashEntry(key: string, value: string) {
-// 	const keyBytes = stringToBytes(key);
-// 	const valueBytes = stringToBytes(value);
-// 	return generate_row_hash(keyBytes, valueBytes);
-// }
+const SERVER_URL = "https://medi0backendrusty.spicybuilds.xyz/";
 
-// export function stringToBytes(str: string) {
-// 	const data = [];
-// 	for (let i = 0; i < str.length; i++) data.push(str.charCodeAt(i));
-// 	return data;
-// }
+interface GenerateCommitmentAndProofRequest {
+	rowTitles: string[];
+	rowContents: string[];
+	rowSelectors: number[];
+}
 
-export {};
+export function generateDocCommitment(data: GenerateCommitmentAndProofRequest) {
+	return axios.post(SERVER_URL, data);
+}
+
+export function generateProof(data: GenerateCommitmentAndProofRequest) {
+	return axios.post(SERVER_URL, data);
+}
+
+interface ProofVerificationRequest {
+	proof: number[];
+	row_title: string;
+	row_content: string;
+	commitment: string;
+}
+
+export function verifyProof(data: ProofVerificationRequest) {
+	return axios.post(SERVER_URL, data);
+}
