@@ -17,7 +17,7 @@ export function useDocUploadIpfs() {
 		setIsLoading(true);
 
 		try {
-			const file = new File([JSON.stringify(doc)], doc.docName, {
+			const file = new File([JSON.stringify(doc)], doc.fileName, {
 				type: "text/plain",
 			});
 

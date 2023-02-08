@@ -61,7 +61,7 @@ export function fieldsFromJSON(jsonString: string): Field[] {
 }
 
 export function humanFileSize(size: number) {
-	const i = size == 0 ? 0 : Math.floor(Math.log(size) / Math.log(1024));
+	const i = size === 0 ? 0 : Math.floor(Math.log(size) / Math.log(1024));
 	return (size / Math.pow(1024, i)).toFixed(2) + " " + ["B", "kB", "MB", "GB", "TB"][i];
 }
 
@@ -90,4 +90,16 @@ export async function parsePdf(file: File) {
 	} catch (e) {
 		throw e;
 	}
+}
+
+export function prepareFieldsForHashing(fields: Field[]) {
+	const keys = [];
+	const values = [];
+
+	for (let i = 0; i < fields.length; i++) {
+		keys.push(fields[i].key);
+		values.push(fields[i].value);
+	}
+
+	return [keys, values];
 }

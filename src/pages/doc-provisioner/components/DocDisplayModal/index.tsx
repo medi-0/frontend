@@ -88,7 +88,7 @@ function DocDisplayModal({ doc }: DocDisplayModalProps) {
 						<DocHeader
 							cid={doc.cid}
 							fileHash={doc.hash}
-							filename={doc.docName}
+							filename={doc.fileName}
 							timestamp={doc.blockTimestamp}
 							hospitalName={doc.hospitalName}
 							patientAddress={doc.patientAddress}
@@ -108,8 +108,12 @@ function DocDisplayModal({ doc }: DocDisplayModalProps) {
 							className="flex flex-col flex-1 gap-1.5 overflow-scroll h-full"
 							key={doc.fields.length}
 						>
-							{doc.fields.map((e) => (
-								<StaticDocField entryKey={e.key} entryValue={e.value} />
+							{doc.fields.map((e, idx) => (
+								<StaticDocField
+									entryKey={e.key}
+									entryValue={e.value}
+									key={`${e.key}-${e.value}-${idx}`}
+								/>
 							))}
 						</div>
 					) : (

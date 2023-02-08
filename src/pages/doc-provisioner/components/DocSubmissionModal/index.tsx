@@ -12,6 +12,7 @@ import PdfUploadForm from "./PdfUploadForm";
 import { useState } from "react";
 import { useDocCommitment } from "../../../../lib/hooks/useDocCommitment";
 import { CommitmentProgress } from "./CommitmentProgress";
+import { useUser } from "../../../../providers/UserProvider";
 
 type ModalPhase = "UPLOAD" | "SUBMISSION" | "COMMITMENT";
 
@@ -30,10 +31,16 @@ function DocSubmissionModal() {
 	const [fields, setFields] = useState<Field[]>([]);
 	const [phase, setPhase] = useState<ModalPhase>("UPLOAD");
 
+	const { account, role } = useUser();
 	const { upload, commitment } = useDocCommitment();
 
 	const handlePdfUploadFormSubmit = useCallback(async function (processedText: string) {
-		setFields(fieldsFromJSON(processedText));
+		let f = fieldsFromJSON(processedText);
+		// only select the first 10 fields
+		if (f.length > 10) {
+			f = f.slice(0, 10);
+		}
+		setFields(f);
 		setPhase("SUBMISSION");
 	}, []);
 
@@ -41,15 +48,27 @@ function DocSubmissionModal() {
 		async (docName: string, patientAddress: string, fields: Field[]) => {
 			setPhase("COMMITMENT");
 
+			const arr = [...fields];
+			if (fields.length < 10) {
+				const emptyFields = 10 - fields.length;
+
+				for (let i = 0; i < emptyFields; i++) {
+					arr.push({
+						key: "-",
+						value: "-",
+					});
+				}
+			}
+
 			commitment.commit({
-				docName,
+				fields: arr,
 				patientAddress,
-				hospitalName: "Hospital Banting",
-				hospitalAddress: "0x12415213132",
-				fields,
+				fileName: docName,
+				hospitalAddress: account.address || "",
+				hospitalName: role.hospital?.name || "",
 			});
 		},
-		[commitment]
+		[commitment, account.address, role.hospital]
 	);
 
 	return (

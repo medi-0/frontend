@@ -2,7 +2,6 @@ import { useCallback, useState } from "react";
 import { Modal as ChakraModal, ModalOverlay } from "@chakra-ui/react";
 
 import FieldSelection from "./FieldSelection";
-import { Field } from "../../../../lib/utils";
 import { FullCommittedDocumentData } from "../../../../lib/types";
 import { useGenerateDocProofModal } from "../../PatientModalContext";
 
@@ -13,7 +12,7 @@ function GenerateProofModal() {
 	const [phase, setPhase] = useState<GenerateProofModalPhase>("FIELD_SELECTION");
 
 	const onSubmit = useCallback(
-		(selectedFields: Field[], doc: FullCommittedDocumentData) => {
+		(selectedFields: boolean[], doc: FullCommittedDocumentData) => {
 			console.log("generating proof for fields", selectedFields, doc);
 		},
 		[]

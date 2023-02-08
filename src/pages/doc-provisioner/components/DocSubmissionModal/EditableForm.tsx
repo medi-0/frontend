@@ -189,6 +189,7 @@ function EditableForm({
 							<EditableFormInput
 								fieldKey={e.key}
 								fieldValue={e.value}
+								// key={`${e.key}-${e.value}-${idx}`}
 								onClick={() => onRemoveField(idx)}
 								onKeyChange={(v) => onKeyChange(idx, v)}
 								onValueChange={(v) => onValueChange(idx, v)}

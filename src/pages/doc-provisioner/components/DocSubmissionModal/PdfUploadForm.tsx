@@ -70,21 +70,21 @@ export default function PdfUploadForm({ onSubmit }: PdfUploadProps) {
 
 		// this is for testing only
 		// to avoid making too many requests
-		const respText =
-			'[{"key": "name", "value": "The value"}, {"key": "date of birth", "value": "Another value"}, {"key": "treatments", "value": ""}, {"key": "medicines", "value": ""}, {"key": "allergies", "value": ""}, {"key": "x-ray results", "value": ""}, {"key": "hostpital admission", "value": ""}, {"key": "hostpital discharge", "value": ""}, {"key": "lifestyle", "value": ""}]';
+		// const respText =
+		// 	'[{"key": "name", "value": "The value"}, {"key": "date of birth", "value": "Another value"}, {"key": "treatments", "value": ""}, {"key": "medicines", "value": ""}, {"key": "allergies", "value": ""}, {"key": "x-ray results", "value": ""}, {"key": "hostpital admission", "value": ""}, {"key": "hostpital discharge", "value": ""}, {"key": "lifestyle", "value": ""}]';
 
-		onSubmit(respText);
-		setIsError(false);
+		// onSubmit(respText);
+		// setIsError(false);
 
-		// parsePdf(file)
-		// 	.then((value) => {
-		// 		processText(value).then(({ respText }) => {
-		// 			onSubmit(respText);
-		// 			setIsError(false);
-		// 		});
-		// 	})
-		// 	.catch((_e) => setIsError(true))
-		// 	.finally(() => setIsLoading(true));
+		parsePdf(file)
+			.then((value) => {
+				processText(value).then(({ respText }) => {
+					onSubmit(respText);
+					setIsError(false);
+				});
+			})
+			.catch((_e) => setIsError(true))
+			.finally(() => setIsLoading(true));
 	};
 
 	const handleFileDrop = (

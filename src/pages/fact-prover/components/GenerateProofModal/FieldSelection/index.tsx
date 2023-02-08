@@ -1,6 +1,5 @@
 import { ModalCloseButton, ModalContent, Spinner } from "@chakra-ui/react";
 import SelectableForm from "./SelectableForm";
-import { Field } from "../../../../../lib/utils";
 import { FullCommittedDocumentData } from "../../../../../lib/types";
 import { useCallback, useEffect, useState } from "react";
 import { useGenerateDocProofModal } from "../../../PatientModalContext";
@@ -8,7 +7,7 @@ import { useDocFetchIpfs } from "../../../../../lib/hooks/useDocFetchIpfs";
 import cloneDeep from "lodash.clonedeep";
 
 interface FieldSelectionContainerProps {
-	onSubmit: (selectedFields: Field[], doc: FullCommittedDocumentData) => void;
+	onSubmit: (selectedFields: boolean[], doc: FullCommittedDocumentData) => void;
 }
 
 export default function FieldSelectionContainer({
@@ -39,7 +38,7 @@ export default function FieldSelectionContainer({
 	}, [doc, fetchFiles]);
 
 	const handleSubmit = useCallback(
-		(fields: Field[]) => {
+		(fields: boolean[]) => {
 			if (!fullDoc) return;
 			onSubmit(fields, fullDoc);
 		},
@@ -60,7 +59,7 @@ interface FieldSelectionProps {
 	isError: boolean;
 	isLoading: boolean;
 	doc: FullCommittedDocumentData | null;
-	onSubmit: (selectedFields: Field[]) => void;
+	onSubmit: (selected: boolean[]) => void;
 }
 
 function FieldSelection({ doc, isError, isLoading, onSubmit }: FieldSelectionProps) {

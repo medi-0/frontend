@@ -2,7 +2,7 @@ import { CIDString } from "web3.storage";
 import { Field } from "./utils";
 
 export interface Doc {
-	docName: string;
+	fileName: string;
 	hospitalName: string;
 	hospitalAddress: string;
 	patientAddress: string;

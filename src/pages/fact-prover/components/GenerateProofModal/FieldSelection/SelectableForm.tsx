@@ -56,20 +56,25 @@ function SelectableFormInput({
 
 interface SelectableFormProps {
 	doc: FullCommittedDocumentData;
-	onSubmit: (data: Field[]) => void;
+	onSubmit: (selected: boolean[]) => void;
 }
 
 export default function SelectableForm({ doc, onSubmit }: SelectableFormProps) {
 	const [fields] = useState<Field[]>(doc.fields);
-	const [selectedFieldIndex, setSelectedFieldIndex] = useState<number[]>([]);
+	const [selected, setSelected] = useState<boolean[]>(() => {
+		const selected = [];
+		for (let i = 0; i < 10; i++) selected.push(false);
+		return selected;
+	});
 
 	const onSelectField = useCallback((idx: number) => {
-		setSelectedFieldIndex((prev) => {
-			const arr = [...prev];
-			const exist = arr.findIndex((value) => value === idx);
+		setSelected((prev) => {
+			// const exist = arr.findIndex((value) => value === idx);
+			// if (exist === -1) arr.push(idx);
+			// else arr.splice(exist, 1);
 
-			if (exist === -1) arr.push(idx);
-			else arr.splice(exist, 1);
+			const arr = [...prev];
+			arr[idx] = !arr[idx];
 
 			return arr;
 		});
@@ -82,7 +87,7 @@ export default function SelectableForm({ doc, onSubmit }: SelectableFormProps) {
 					<DocHeader
 						cid={doc.cid}
 						fileHash={doc.hash}
-						filename={doc.docName}
+						filename={doc.fileName}
 						timestamp={doc.blockTimestamp}
 						hospitalName={doc.hospitalName}
 						patientAddress={doc.patientAddress}
@@ -103,13 +108,17 @@ export default function SelectableForm({ doc, onSubmit }: SelectableFormProps) {
 						className="flex flex-col flex-1 gap-1.5 overflow-scroll h-full"
 						key={fields.length}
 					>
-						{fields.map((e, idx) => (
-							<SelectableFormInput
-								fieldKey={e.key}
-								fieldValue={e.value}
-								onClick={() => onSelectField(idx)}
-							/>
-						))}
+						{fields.map((e, idx) => {
+							if (e.key && e.value)
+								return (
+									<SelectableFormInput
+										fieldKey={e.key}
+										fieldValue={e.value}
+										onClick={() => onSelectField(idx)}
+									/>
+								);
+							else return <></>;
+						})}
 					</div>
 				) : (
 					<div>no fields</div>
@@ -117,7 +126,7 @@ export default function SelectableForm({ doc, onSubmit }: SelectableFormProps) {
 			</ModalBody>
 			<ModalFooter justifyContent="center">
 				<Button
-					isDisabled={selectedFieldIndex.length === 0 ? true : false}
+					isDisabled={selected.length === 0 ? true : false}
 					borderRadius="3xl"
 					paddingX="14"
 					className=""
@@ -125,11 +134,12 @@ export default function SelectableForm({ doc, onSubmit }: SelectableFormProps) {
 					mr={3}
 					// onClick={mainModal.onClose}
 					onClick={() => {
-						const selectedFields = [];
-						for (let i = 0; i < selectedFieldIndex.length; i++) {
-							selectedFields.push(doc.fields[selectedFieldIndex[i]]);
-						}
-						onSubmit(selectedFields);
+						// const selectedFields = [];
+						// for (let i = 0; i < selectedFieldIndex.length; i++) {
+						// 	selectedFields.push(doc.fields[selectedFieldIndex[i]]);
+						// }
+						// onSubmit(selectedFields);
+						onSubmit(selected);
 					}}
 				>
 					Generate Proof

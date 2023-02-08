@@ -27,7 +27,7 @@ export function useDocCommitment() {
 
 			const tx = await contract.commitPatientFileHashAndPatientData(
 				doc.patientAddress as `0x${string}`,
-				doc.docName,
+				doc.fileName,
 				cid as string,
 				BigNumber.from(0)
 			);

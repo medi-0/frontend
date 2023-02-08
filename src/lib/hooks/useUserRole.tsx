@@ -1,14 +1,28 @@
 import { useAccount } from "wagmi";
 import { useEffect, useState } from "react";
 
-import { UserRole } from "../types";
+import { Hospital, UserRole } from "../types";
 import { useMediCoreContract } from "./useMediCoreContract";
 
 export function useUserRole() {
 	const [role, setRole] = useState<UserRole | null>(null);
+	const [hospital, setHospital] = useState<Hospital | null>(null);
 
 	const { address } = useAccount();
 	const { contract, isLoading, isError } = useMediCoreContract();
+
+	useEffect(() => {
+		if (!contract || !address || !role) return;
+		if (role !== UserRole.HOSPITAL_ROLE) return;
+
+		contract.hospitals(address).then(({ name, description, isCreated }) => {
+			setHospital({
+				name,
+				isCreated,
+				description,
+			});
+		});
+	}, [role, contract, address]);
 
 	useEffect(() => {
 		if (!address) {
@@ -36,5 +50,5 @@ export function useUserRole() {
 		});
 	}, [contract, address]);
 
-	return { type: role, isLoading, isError };
+	return { type: role, isLoading, isError, hospital };
 }

@@ -67,6 +67,7 @@ export const docFormReducer = function (
 
 		case DocFormActionKind.ADD_FIELD: {
 			if (!state.fields) return state;
+			if (state.fields.length === 10) return state;
 
 			const { key, value } = payload;
 			const fields = cloneDeep(state.fields);
@@ -80,6 +81,7 @@ export const docFormReducer = function (
 
 		case DocFormActionKind.REMOVE_FIELD: {
 			if (!state.fields) return state;
+			if (state.fields.length === 0) return state;
 
 			const { index } = payload;
 			const fields = cloneDeep(state.fields);
