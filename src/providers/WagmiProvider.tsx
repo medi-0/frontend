@@ -5,12 +5,13 @@ import { configureChains, createClient, WagmiConfig } from "wagmi";
 
 import "@rainbow-me/rainbowkit/styles.css";
 import { infuraProvider } from "wagmi/providers/infura";
-import { InjectedConnector } from "wagmi/connectors/injected";
-import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 import { RainbowKitProvider, getDefaultWallets } from "@rainbow-me/rainbowkit";
 
-const { chains, provider, webSocketProvider } = configureChains(
-	[goerli, polygonMumbai],
+const { chains, provider } = configureChains(
+	[
+		goerli,
+		//  polygonMumbai
+	],
 	[
 		infuraProvider({
 			apiKey: process.env.REACT_APP_INFURA_API || "",
@@ -25,16 +26,6 @@ const { connectors } = getDefaultWallets({
 });
 
 const client = createClient({
-	// connectors: [
-	// 	new MetaMaskConnector(),
-	// 	new InjectedConnector({ chains }),
-	// 	// new WalletConnectConnector({
-	// 	// 	chains,
-	// 	// 	options: {
-	// 	// 		qrcode: true,
-	// 	// 	},
-	// 	// }),
-	// ],
 	provider,
 	connectors,
 });

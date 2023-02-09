@@ -18,6 +18,7 @@ export const UserContext = createContext<TUserContext>({
 		status: "disconnected",
 	},
 	role: {
+		hospital: null,
 		isError: false,
 		isLoading: false,
 		type: UserRole.UNREGISTERED,

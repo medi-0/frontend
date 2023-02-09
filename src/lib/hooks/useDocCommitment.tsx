@@ -1,19 +1,20 @@
-import { useCallback, useEffect, useState } from "react";
-import { Doc, DocWithCID } from "../types";
+import { Doc } from "../types";
+import { useState } from "react";
 import { useDocUploadIpfs } from "../hooks/useDocUploadIpfs";
-import { CIDString } from "web3.storage";
-import { useWaitForTransaction } from "wagmi";
 
 import { useMediCoreContract } from "./useMediCoreContract";
 import { BigNumber } from "ethers";
 import { TransactionReceipt } from "@ethersproject/abstract-provider";
+import {
+	GenerateCommitmentAndProofRequest,
+	generateDocCommitment,
+} from "../utils/fileHasher";
+import { prepareFieldsForHashing } from "../utils";
 
 export function useDocCommitment() {
 	const { contract } = useMediCoreContract();
 
 	const ipfs = useDocUploadIpfs();
-
-	const [doc, setDoc] = useState<DocWithCID | null>(null);
 
 	const [error, setError] = useState<any>();
 	const [isError, setIsError] = useState(false);
@@ -24,28 +25,41 @@ export function useDocCommitment() {
 	const commit = async function (doc: Doc) {
 		if (!contract) return;
 
-		setIsLoading(true);
-		ipfs.upload(doc)
-			.then((cid) => {
-				setDoc({
-					...doc,
-					cid: cid as CIDString,
-				});
+		try {
+			const cid = await ipfs.upload(doc, `medi0-artifact-${doc.fileName}`);
 
-				// contract
-				// 	.commitPatientFileHashAndPatientData(
-				// 		doc.patientAddress as `0x${string}`,
-				// 		doc.docName,
-				// 		cid as string,
-				// 		BigNumber.from(0)
-				// 	)
-				// 	.then((res) => res.wait().then((receipt) => setReceipt(receipt)));
-			})
-			.catch((e) => {
-				setError(e);
-				setIsError(true);
-			})
-			.finally(() => setIsLoading(false));
+			const [titles, contents] = prepareFieldsForHashing(doc.fields);
+			const row_selectors = titles.map(() => 0);
+
+			setIsLoading(true);
+
+			const body: GenerateCommitmentAndProofRequest = {
+				row_selectors,
+				row_titles: titles,
+				row_contents: contents,
+			};
+
+			const {
+				data: { commitment },
+			} = await generateDocCommitment(body);
+
+			console.log("this is what going to be committed", body, commitment);
+
+			const tx = await contract.commitPatientFileHashAndPatientData(
+				doc.patientAddress as `0x${string}`,
+				doc.fileName,
+				cid as string,
+				BigNumber.from(commitment)
+			);
+
+			const txReceipt = await tx.wait();
+			setReceipt(txReceipt);
+		} catch (e) {
+			setError(e);
+			setIsError(true);
+		}
+
+		setIsLoading(false);
 	};
 
 	return {
@@ -53,9 +67,9 @@ export function useDocCommitment() {
 		commitment: {
 			error,
 			commit,
+			receipt,
 			isError,
 			isLoading,
-			// receipt,
 		},
 	};
 }

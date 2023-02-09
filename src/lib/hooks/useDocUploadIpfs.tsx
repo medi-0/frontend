@@ -13,11 +13,11 @@ export function useDocUploadIpfs() {
 		token: process.env.REACT_APP_WEB3_STORAGE_API as string,
 	});
 
-	const upload = async function (doc: Doc) {
+	const upload = async function (data: any, filename: string) {
 		setIsLoading(true);
 
 		try {
-			const file = new File([JSON.stringify(doc)], doc.docName, {
+			const file = new File([JSON.stringify(data)], filename, {
 				type: "text/plain",
 			});
 

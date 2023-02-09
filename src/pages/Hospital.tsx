@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useContext } from "react";
 import Navbar from "../components/navbar/Navbar";
-import Patient from "./Patient";
 import { useDisclosure } from "@chakra-ui/react";
 // import { MyModal } from "../components/RegistrationModal/MyModal";
 

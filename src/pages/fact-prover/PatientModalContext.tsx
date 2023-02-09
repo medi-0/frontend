@@ -3,56 +3,53 @@ import {
 	PropsWithChildren,
 	useCallback,
 	useContext,
-	useEffect,
 	useState,
 } from "react";
-import { CIDString } from "web3.storage";
-import { useMainModalContext } from "../../providers/MainModalContext";
+import { CommittedMedicalDocumentHeader } from "../../lib/types";
+import { useMainModalContext } from "../../providers/ModalProvider";
 
-interface IPatientModalContext {
-	state: {
-		docCid: CIDString | null;
-	};
-	open: (cid: CIDString) => void;
-	// close: () => void;
+interface IGenerateProofModalContext {
+	doc: CommittedMedicalDocumentHeader | null;
+	isOpen: boolean;
+	onClose: () => void;
+	onOpen: (doc: CommittedMedicalDocumentHeader) => void;
 }
 
-export const PatientModalContext = createContext<IPatientModalContext>({
-	state: { docCid: null },
-	open: () => {},
-	// close: () => {},
+export const GenerateProofModalContext = createContext<IGenerateProofModalContext>({
+	doc: null,
+	isOpen: false,
+	onOpen: () => {},
+	onClose: () => {},
 });
 
-export const usePatientModal = function () {
-	return useContext(PatientModalContext);
+export const useGenerateDocProofModal = function () {
+	return useContext(GenerateProofModalContext);
 };
 
-export const PatientModalProvider: React.FC<PropsWithChildren> = function ({ children }) {
-	const mainModal = useMainModalContext();
+export const GenerateProofModalProvider: React.FC<PropsWithChildren> = function ({
+	children,
+}) {
+	const { isOpen, onClose, onOpen } = useMainModalContext();
+	const [doc, setDoc] = useState<CommittedMedicalDocumentHeader | null>(null);
 
-	const [cid, setCid] = useState<CIDString | null>(null);
-
-	const openModal = useCallback(
-		(cid: CIDString) => {
-			setCid(cid);
-			console.log("cid asda", cid);
-
-			mainModal.onOpen();
+	const handleOpen = useCallback(
+		(doc: CommittedMedicalDocumentHeader) => {
+			setDoc(doc);
+			onOpen();
 		},
-		[mainModal]
+		[onOpen]
 	);
 
 	return (
-		<PatientModalContext.Provider
+		<GenerateProofModalContext.Provider
 			value={{
-				state: {
-					docCid: cid,
-				},
-				open: openModal,
-				// close: closeModal,
+				doc,
+				isOpen,
+				onClose,
+				onOpen: handleOpen,
 			}}
 		>
 			{children}
-		</PatientModalContext.Provider>
+		</GenerateProofModalContext.Provider>
 	);
 };

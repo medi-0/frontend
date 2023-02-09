@@ -3,20 +3,31 @@ import UploadInitButton from "../../components/UploadInitButton";
 
 import { useAccount } from "wagmi";
 import { gql } from "@apollo/client";
-import { Modal } from "./components";
+import { DocSubmissionModal } from "./components";
 import { useCallback, useRef } from "react";
 import { CommittedMedicalDocumentHeader } from "../../lib/types";
-import { useMainModalContext } from "../../providers/MainModalContext";
+import { useMainModalContext } from "../../providers/ModalProvider";
+import {
+	DocDisplayModalProvider,
+	useDocDisplayModal,
+} from "./providers/DocDisplayModalProvider";
+import DocDisplayModal from "./components/DocDisplayModal";
 
 function DocProvisionerView() {
+	const { onOpen } = useDocDisplayModal();
+
 	const { address } = useAccount();
 	const counterRef = useRef<HTMLSpanElement | null>(null);
 
 	const modalContext = useMainModalContext();
 
-	const handleCardClick = useCallback((doc: CommittedMedicalDocumentHeader) => {
-		console.log("card clicked", doc.cid);
-	}, []);
+	const handleCardClick = useCallback(
+		(doc: CommittedMedicalDocumentHeader) => {
+			console.log("card clicked", doc.cid);
+			onOpen(doc);
+		},
+		[onOpen]
+	);
 
 	const handleListChange = useCallback((count: number) => {
 		if (!counterRef.current) return;
@@ -54,7 +65,7 @@ function DocProvisionerView() {
 				<div className="px-2.5 border rounded bg-neutral-100">
 					Total docs :{" "}
 					<span id="list-counter" ref={counterRef}>
-						3
+						2
 					</span>
 				</div>
 			</div>
@@ -66,9 +77,20 @@ function DocProvisionerView() {
 				onChange={() => handleListChange(3)}
 			/>
 			<UploadInitButton onClick={modalContext.onOpen} />
-			<Modal />
+
+			<DocDisplayModal />
+
+			<DocSubmissionModal />
 		</>
 	);
 }
 
-export default DocProvisionerView;
+function DocProvisionerViewWithContext() {
+	return (
+		<DocDisplayModalProvider>
+			<DocProvisionerView />
+		</DocDisplayModalProvider>
+	);
+}
+
+export default DocProvisionerViewWithContext;

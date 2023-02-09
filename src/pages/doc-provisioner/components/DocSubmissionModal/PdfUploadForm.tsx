@@ -1,5 +1,5 @@
 import { Button, ModalBody, ModalFooter, Spinner } from "@chakra-ui/react";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { humanFileSize, parsePdf, processText } from "../../../../lib/utils";
 import Dropzone, { DropEvent, FileRejection } from "react-dropzone";
 import { ReactComponent as FileIcon } from "../../../../lib/assets/svg/file.svg";
@@ -68,47 +68,23 @@ export default function PdfUploadForm({ onSubmit }: PdfUploadProps) {
 
 		setIsLoading(true);
 
+		// this is for testing only
+		// to avoid making too many requests
+		// const respText =
+		// 	'[{"key": "name", "value": "The value"}, {"key": "date of birth", "value": "Another value"}, {"key": "treatments", "value": ""}, {"key": "medicines", "value": ""}, {"key": "allergies", "value": ""}, {"key": "x-ray results", "value": ""}, {"key": "hostpital admission", "value": ""}, {"key": "hostpital discharge", "value": ""}, {"key": "lifestyle", "value": ""}]';
+
+		// onSubmit(respText);
+		// setIsError(false);
+
 		parsePdf(file)
-			// file
-			// .text()
 			.then((value) => {
-				// const respText =
-				// 	'[{"key": "name", "value": "The value"}, {"key": "date of birth", "value": "Another value"}, {"key": "treatments", "value": ""}, {"key": "medicines", "value": ""}, {"key": "allergies", "value": ""}, {"key": "x-ray results", "value": ""}, {"key": "hostpital admission", "value": ""}, {"key": "hostpital discharge", "value": ""}, {"key": "lifestyle", "value": ""}]';
-				// console.log("parse pdf", value);
-				// file.text()
-
-				console.log("something bruh", value);
-
 				processText(value).then(({ respText }) => {
 					onSubmit(respText);
 					setIsError(false);
 				});
-
-				// onSubmit(respText);
-				// setIsError(false);
 			})
 			.catch((_e) => setIsError(true))
 			.finally(() => setIsLoading(true));
-
-		// 	.then((value) => {
-		// 		// const respText =
-		// 		// 	'[{"key": "name", "value": "The value"}, {"key": "date of birth", "value": "Another value"}, {"key": "treatments", "value": ""}, {"key": "medicines", "value": ""}, {"key": "allergies", "value": ""}, {"key": "x-ray results", "value": ""}, {"key": "hostpital admission", "value": ""}, {"key": "hostpital discharge", "value": ""}, {"key": "lifestyle", "value": ""}]';
-
-		// 		processText(value).then(({ respText }) => {
-		// 			onSubmit(respText);
-		// 			setIsError(false);
-		// 		});
-
-		// 		// onSubmit(respText);
-		// 		// setIsError(false);
-		// 	})
-		// 	.catch((_e) => setIsError(true))
-		// 	.finally(() => setIsLoading(true));
-
-		// const text = await file?.text();
-		// const { respText } = await processText(text);
-		// this is for testing only
-		// to avoid making too many requests
 	};
 
 	const handleFileDrop = (
@@ -121,7 +97,7 @@ export default function PdfUploadForm({ onSubmit }: PdfUploadProps) {
 
 	return (
 		<>
-			<ModalBody className="flex h-72" minH="300px" paddingX="0" paddingY="0">
+			<ModalBody className="flex h-72" minH="300px" padding="0.7rem 0 0 0">
 				{isLoading ? (
 					<div className="flex-1 flex items-center justify-center">
 						<Spinner />

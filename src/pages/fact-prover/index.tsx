@@ -2,30 +2,34 @@ import DocumentList from "../../components/CommittedDocList";
 
 import { useAccount } from "wagmi";
 import { gql } from "@apollo/client";
-import { Modal } from "./components";
+import { GenerateProofModal } from "./components";
 import { useCallback, useRef } from "react";
 import { CommittedMedicalDocumentHeader } from "../../lib/types";
-import { useMainModalContext } from "../../providers/MainModalContext";
-import { PatientModalProvider, usePatientModal } from "./PatientModalContext";
+import {
+	GenerateProofModalProvider,
+	useGenerateDocProofModal,
+} from "./PatientModalContext";
 
 export default function PatientViewContainer() {
 	return (
-		<PatientModalProvider>
+		<GenerateProofModalProvider>
 			<PatientView />
-		</PatientModalProvider>
+		</GenerateProofModalProvider>
 	);
 }
 
 function PatientView() {
 	const { address } = useAccount();
+	const { onOpen } = useGenerateDocProofModal();
 	const counterRef = useRef<HTMLSpanElement | null>(null);
 
-	const { state, open } = usePatientModal();
-
-	const handleCardClick = useCallback((doc: CommittedMedicalDocumentHeader) => {
-		// console.log("card clicked", doc.cid);
-		open(doc.cid);
-	}, []);
+	const handleCardClick = useCallback(
+		(doc: CommittedMedicalDocumentHeader) => {
+			// console.log("card clicked", doc.cid);
+			onOpen(doc);
+		},
+		[onOpen]
+	);
 
 	const handleListChange = useCallback((count: number) => {
 		if (!counterRef.current) return;
@@ -63,7 +67,7 @@ function PatientView() {
 				<div className="px-2.5 border rounded bg-neutral-100">
 					Total docs :{" "}
 					<span id="list-counter" ref={counterRef}>
-						3
+						2
 					</span>
 				</div>
 			</div>
@@ -74,7 +78,7 @@ function PatientView() {
 				onClick={handleCardClick}
 				onChange={() => handleListChange(3)}
 			/>
-			<Modal />
+			<GenerateProofModal />
 		</>
 	);
 }

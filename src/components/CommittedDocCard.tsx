@@ -26,7 +26,7 @@ function CommittedDocCard({ data, onClick }: Props) {
 						</>
 					) : (
 						<>
-							<span>Hospital ID :</span>
+							<span>Hospital ID : </span>
 							<span className="italic">{data.hospital}</span>
 						</>
 					)}

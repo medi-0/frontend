@@ -1,44 +1,46 @@
 import {
 	ModalOverlay,
 	ModalContent,
-	ModalHeader,
 	ModalCloseButton,
 	Modal as ChakraModal,
 } from "@chakra-ui/react";
 import EditableForm from "./EditableForm";
-import { useMainModalContext } from "../../../../providers/MainModalContext";
+import { useMainModalContext } from "../../../../providers/ModalProvider";
 import { Field, fieldsFromJSON } from "../../../../lib/utils";
 import { useCallback } from "react";
 import PdfUploadForm from "./PdfUploadForm";
 import { useState } from "react";
-import { useDocUploadIpfs } from "../../../../lib/hooks/useDocUploadIpfs";
-import { DocCommitment } from "./DocUploadIpfs";
-
-import { Doc } from "../../../../lib/types";
 import { useDocCommitment } from "../../../../lib/hooks/useDocCommitment";
+import { CommitmentProgress } from "./CommitmentProgress";
+import { useUser } from "../../../../providers/UserProvider";
 
 type ModalPhase = "UPLOAD" | "SUBMISSION" | "COMMITMENT";
 
-export default function ModalContainer() {
+export default function DocSubmissionModalContainer() {
 	const mainModal = useMainModalContext();
 
 	return (
 		<ChakraModal isOpen={mainModal.isOpen} onClose={mainModal.onClose} isCentered>
 			<ModalOverlay />
-			<Modal />
+			<DocSubmissionModal />
 		</ChakraModal>
 	);
 }
 
-function Modal() {
+function DocSubmissionModal() {
 	const [fields, setFields] = useState<Field[]>([]);
 	const [phase, setPhase] = useState<ModalPhase>("UPLOAD");
 
+	const { account, role } = useUser();
 	const { upload, commitment } = useDocCommitment();
-	// const { upload, isLoading, cid, isError } = useDocUploadIpfs();
 
 	const handlePdfUploadFormSubmit = useCallback(async function (processedText: string) {
-		setFields(fieldsFromJSON(processedText));
+		let f = fieldsFromJSON(processedText);
+		// only select the first 10 fields
+		if (f.length > 10) {
+			f = f.slice(0, 10);
+		}
+		setFields(f);
 		setPhase("SUBMISSION");
 	}, []);
 
@@ -46,15 +48,27 @@ function Modal() {
 		async (docName: string, patientAddress: string, fields: Field[]) => {
 			setPhase("COMMITMENT");
 
+			const arr = [...fields];
+			if (fields.length < 10) {
+				const emptyFields = 10 - fields.length;
+
+				for (let i = 0; i < emptyFields; i++) {
+					arr.push({
+						key: "-",
+						value: "-",
+					});
+				}
+			}
+
 			commitment.commit({
-				docName,
+				fields: arr,
 				patientAddress,
-				hospitalName: "Hospital Banting",
-				hospitalAddress: "0x12415213132",
-				fields,
+				fileName: docName,
+				hospitalAddress: account.address || "",
+				hospitalName: role.hospital?.name || "",
 			});
 		},
-		[]
+		[commitment, account.address, role.hospital]
 	);
 
 	return (
@@ -70,35 +84,31 @@ function Modal() {
 			paddingTop="2rem"
 			paddingX="1rem"
 		>
-			{/* <ModalHeader paddingBottom="0.5rem">Document Provisioning</ModalHeader> */}
-			<div className="absolute top-[-25px] right-[-25px] bg-white">
-				<ModalCloseButton
-					backgroundColor="#cecece"
-					borderRadius="50px"
-					className="shadow-lg"
-				/>
-			</div>
+			<ModalCloseButton
+				height="min-content"
+				backgroundColor="#df57a7"
+				borderRadius="2rem"
+				className="shadow-lg"
+				width="4rem"
+				padding="0.2rem 1rem"
+			>
+				<span className="font-bold text-white">close</span>
+			</ModalCloseButton>
 
 			{phase === "SUBMISSION" ? (
 				<EditableForm initialFields={fields} onSubmit={handleDocSubmit} />
 			) : phase === "UPLOAD" ? (
 				<PdfUploadForm onSubmit={handlePdfUploadFormSubmit} />
 			) : (
-				// <DocCommitment commitment={commitment} upload={upload} />
-				<></>
+				<CommitmentProgress
+					ipfsData={upload.cid}
+					ipfsIsError={upload.isError}
+					ipfsIsLoading={upload.isLoading}
+					commitmentData={commitment.receipt}
+					commitmentIsError={commitment.isError}
+					commitmentIsLoading={commitment.isLoading}
+				/>
 			)}
-			{/* <button
-				onClick={() =>
-					handleDocCommit("test filename", "0x1231123123", [
-						{
-							key: "this is a key",
-							value: "this is a value",
-						},
-					])
-				}
-			>
-				send
-			</button> */}
 		</ModalContent>
 	);
 }
