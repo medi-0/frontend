@@ -15,11 +15,14 @@ import React, { useEffect, useState } from "react";
 import QrReader from "react-qr-reader";
 
 export default function QrPanel() {
-  // const {docs, fetchFiles } = useDocFetchIpfs();
-  // const handleFetch = () => {
-  //   // fetchFiles(result) docs
-  //   fetch(result).then(res => res.json()).then(data => console.log(data))
-  // };
+
+  const [showButton, setShowButton] = useState(false)
+
+  function handleClick() {
+    setShowButton(true);
+    fetchData();
+    onClose();
+  }
 
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -27,7 +30,7 @@ export default function QrPanel() {
   const [posts, setPosts] = useState<any[]>([]);
 
   const fetchData = async () => {
-    const { data } = await axios.get(result);
+    const { data } = await axios.get(`https://${result}.ipfs.w3s.link/`);
 
     setPosts(data);
   };
@@ -54,7 +57,7 @@ export default function QrPanel() {
           <ModalHeader>Modal Title</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <div>
+            <div className="flex justify-center items-center">
               <div className="border border-solid w-80">
                 <QrReader
                   delay={300}
@@ -63,15 +66,13 @@ export default function QrPanel() {
                   style={{ width: "100%" }}
                   facingMode="environment"
                 />
-                <p>{result}</p>
+                <p>IPFS id = {result}</p>
               </div>
-
-              <button onClick={fetchData}>Handle Fetch</button>
             </div>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
-              Close
+          <Button colorScheme="blue" mr={3} onClick={handleClick}>
+              Generate proof
             </Button>
           </ModalFooter>
         </ModalContent>
@@ -85,6 +86,14 @@ export default function QrPanel() {
           </div>
         ))}
       </div>
+      {showButton && (
+        <button
+          className="border boder-solid rounded-full 
+      w-[150px] h-[50px] font-bold bg-lime-200 my-[20px]"
+        >
+          Verify Proof
+        </button>
+      )}
     </div>
   );
 }
