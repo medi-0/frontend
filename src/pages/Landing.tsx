@@ -10,7 +10,7 @@ import img1 from "../lib/assets/picture/zk.png";
 import img2 from "../lib/assets/picture/matic.png";
 import img3 from "../lib/assets/picture/ipfs.png";
 import img4 from "../lib/assets/picture/Quick.png";
-import imgeth from "../lib/assets/picture/eth.png";
+import imgeth from "../lib/assets/picture/medi.png";
 
 export default function Landing() {
   const navigate = useNavigate();
@@ -71,7 +71,7 @@ export default function Landing() {
 
         <div className="h-[500px]">
           <img
-            className="mb-[100px] px-[30px]"
+            className="mb-[200px]"
             src={imgeth}
             alt=""
             width={700}
