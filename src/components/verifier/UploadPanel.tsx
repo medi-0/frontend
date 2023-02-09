@@ -60,43 +60,38 @@ export function UploadPanel() {
     });
   };
 
-  // const handleVerifyButton = async () => {
-  //   setIsLoading(true);
-  //   try {
-  //     if (jsonFileContent !== undefined) {
-  //       const flattenedResult = jsonFileContent?.flatMap((content1: any) => {
-  //         return content1.selectedRows.map((row) => {
-  //           return {
-  //             row_title: row.selectedKey,
-  //             row_content: row.selectedValue,
-  //             commitment: content1.certHash,
-  //             proof: row.proof,
-  //           };
-  //         });
-  //       });
-  //       const bulkRequest = flattenedResult.map((file) =>
-  //         axios.post<{ valid: boolean }>(
-  //           "https://medi0backendrusty.spicybuilds.xyz/verify-proof",
-  //           file
-  //         )
-  //       );
+  const handleVerifyButton = async () => {
+    setIsLoading(true);
 
-  //       const result = (await Promise.all(bulkRequest)).every(
-  //         (res) => res.data.valid === true
-  //       );
+    try {
+      if (jsonFileContent !== undefined) {
+        const bulkRequest = jsonFileContent.selectedRows.map((row) =>
+          axios.post<{ valid: boolean }>(
+            "https://medi0backendrusty.spicybuilds.xyz/verify-proof",
+            {
+              row_title: row.selectedKey,
+              row_content: row.selectedValue,
+              commitment: jsonFileContent.hash,
+              proof: row.proof,
+            }
+          )
+        );
+        const result = (await Promise.all(bulkRequest)).every(
+          (res) => res.data.valid === true
+        );
 
-  //       if (result === true) {
-  //         setIsLoading(false);
-  //         handleVerified();
-  //       } else {
-  //         setIsLoading(false);
-  //         handleNotVerified();
-  //       }
-  //     }
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
+        if (result === true) {
+          setIsLoading(false);
+          handleVerified();
+        } else {
+          setIsLoading(false);
+          handleNotVerified();
+        }
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   const [showButton, setShowButton] = useState(false);
 
@@ -131,26 +126,6 @@ export function UploadPanel() {
     reader.readAsText(e.target?.files[0]);
   };
 
-  // const onVerifyProof = async () => {
-  //   setIsLoading(true);
-  //   if (!address || !connector) {
-  //     return toast({
-  //       title: "Unable to get address or connector",
-  //       description:
-  //         "Unable to get address or connector. Please try to reconnect.",
-  //       isClosable: true,
-  //       status: "error",
-  //     });
-  //   }
-
-  //   setIsLoading(false);
-  //   return toast({
-  //     title: "Invalid proof.json format",
-  //     description: "The provided proof.json file is in an invalid format.",
-  //     status: "error",
-  //     isClosable: true,
-  //   });
-  // };
 
   if (!isConnected)
     return (
@@ -179,155 +154,158 @@ export function UploadPanel() {
         />
 
         <div>
-         
-          <>
-            <Box mt="2" mb="2">
-              <Card>
-                <CardHeader>
-                  <Heading className="font-black text-xl">
-                    Proof Details
-                  </Heading>
-                </CardHeader>
-                <CardBody>
-                  <Stack divider={<StackDivider />} spacing="4">
-                    <Box>
-                      <Heading
-                        size="xs"
-                        textTransform="uppercase"
-                        className="text-[#0F6292]"
-                      >
-                        Verifier Address
-                      </Heading>
-                      <Text pt="2" fontSize="sm">
-                        {address}
-                      </Text>
-                    </Box>
-                    <Box>
-                      <Heading
-                        size="xs"
-                        textTransform="uppercase"
-                        className="text-[#0F6292]"
-                      >
-                        Address
-                      </Heading>
-                      <Text pt="2" fontSize="sm">
-                        {jsonFileContent?.hash}
-                      </Text>
-                    </Box>
-                    <Box>
-                      <Heading
-                        size="xs"
-                        textTransform="uppercase"
-                        className="text-[#0F6292]"
-                      >
-                        Cert Name
-                      </Heading>
-                      <Text pt="2" fontSize="sm">
-                        {jsonFileContent?.patientAddress}
-                      </Text>
-                    </Box>
-                    <Box>
-                      <Heading
-                        size="xs"
-                        textTransform="uppercase"
-                        className="text-[#0F6292]"
-                      >
-                        Cert Hash
-                      </Heading>
-                      <Text pt="2" fontSize="sm">
-                        {jsonFileContent?.fileName}
-                      </Text>
-                    </Box>
-                    <Box>
-                      <Heading
-                        size="xs"
-                        textTransform="uppercase"
-                        className="text-[#0F6292]"
-                      >
-                        Cert Hash
-                      </Heading>
-                      <Text pt="2" fontSize="sm">
-                        {jsonFileContent?.hospitalAddress}
-                      </Text>
-                    </Box>
-                    <Box>
-                      {jsonFileContent?.selectedRows.map((file1) => {
-                        return (
-                          <>
-                            <Stack divider={<StackDivider />} spacing="4">
-                              <Box>
-                                <Heading
-                                  size="xs"
-                                  textTransform="uppercase"
-                                  className="text-[#0F6292]"
-                                >
-                                  Name
-                                </Heading>
-                                <Text pt="2" fontSize="sm">
-                                  {file1.selectedKey}
-                                </Text>
-                              </Box>
-                              <Box>
-                                <Heading
-                                  size="xs"
-                                  textTransform="uppercase"
-                                  className="text-[#0F6292]"
-                                >
-                                  Value
-                                </Heading>
-                                <Text pt="2" fontSize="sm">
-                                  {file1.selectedValue}
-                                </Text>
-                              </Box>
-                              <Box>
-                                <Heading
-                                  size="xs"
-                                  textTransform="uppercase"
-                                  className="text-[#0F6292]"
-                                >
-                                  Generated Proof
-                                </Heading>
-                                <Accordion allowToggle>
-                                  <AccordionItem borderColor={"white"}>
-                                    <AccordionButton>
-                                      <Box
-                                      // as="span"
-                                      // flex="1"
-                                      // textAlign="left"
-                                      >
-                                        <Heading
-                                          size="xs"
-                                          textTransform="uppercase"
-                                          className="border border-solid p-[10px] rounded-full bg-[#BDCDD6]"
+          {jsonFileContent ? (
+            <>
+              <Box mt="2" mb="2">
+                <Card>
+                  <CardHeader>
+                    <Heading className="font-black text-xl">
+                      Proof Details
+                    </Heading>
+                  </CardHeader>
+                  <CardBody>
+                    <Stack divider={<StackDivider />} spacing="4">
+                      <Box>
+                        <Heading
+                          size="xs"
+                          textTransform="uppercase"
+                          className="text-[#0F6292]"
+                        >
+                          Verifier Address
+                        </Heading>
+                        <Text pt="2" fontSize="sm">
+                          {address}
+                        </Text>
+                      </Box>
+                      <Box>
+                        <Heading
+                          size="xs"
+                          textTransform="uppercase"
+                          className="text-[#0F6292]"
+                        >
+                          Hash
+                        </Heading>
+                        <Text pt="2" fontSize="sm">
+                          {jsonFileContent?.hash}
+                        </Text>
+                      </Box>
+                      <Box>
+                        <Heading
+                          size="xs"
+                          textTransform="uppercase"
+                          className="text-[#0F6292]"
+                        >
+                          Patient Address
+                        </Heading>
+                        <Text pt="2" fontSize="sm">
+                          {jsonFileContent?.patientAddress}
+                        </Text>
+                      </Box>
+                      <Box>
+                        <Heading
+                          size="xs"
+                          textTransform="uppercase"
+                          className="text-[#0F6292]"
+                        >
+                          File Name
+                        </Heading>
+                        <Text pt="2" fontSize="sm">
+                          {jsonFileContent?.fileName}
+                        </Text>
+                      </Box>
+                      <Box>
+                        <Heading
+                          size="xs"
+                          textTransform="uppercase"
+                          className="text-[#0F6292]"
+                        >
+                          Hospital Address
+                        </Heading>
+                        <Text pt="2" fontSize="sm">
+                          {jsonFileContent?.hospitalAddress}
+                        </Text>
+                      </Box>
+                      <Box>
+                        {jsonFileContent?.selectedRows.map((file) => {
+                          return (
+                            <>
+                              <Stack divider={<StackDivider />} spacing="4">
+                                <Box>
+                                  <Heading
+                                    size="xs"
+                                    textTransform="uppercase"
+                                    className="text-[#0F6292]"
+                                  >
+                                    Selected Key
+                                  </Heading>
+                                  <Text pt="2" fontSize="sm">
+                                    {file.selectedKey}
+                                  </Text>
+                                </Box>
+                                <Box>
+                                  <Heading
+                                    size="xs"
+                                    textTransform="uppercase"
+                                    className="text-[#0F6292]"
+                                  >
+                                    Selected Value
+                                  </Heading>
+                                  <Text pt="2" fontSize="sm">
+                                    {file.selectedValue}
+                                  </Text>
+                                </Box>
+                                <Box>
+                                  <Heading
+                                    size="xs"
+                                    textTransform="uppercase"
+                                    className="text-[#0F6292]"
+                                  >
+                                    Generated Proof
+                                  </Heading>
+                                  <Accordion allowToggle>
+                                    <AccordionItem borderColor={"white"}>
+                                      <AccordionButton>
+                                        <Box
+                                        // as="span"
+                                        // flex="1"
+                                        // textAlign="left"
                                         >
-                                          Click to see Proof
-                                        </Heading>
-                                      </Box>
-                                      <AccordionIcon />
-                                    </AccordionButton>
-                                    <AccordionPanel pb={4}>
-                                      {file1.proof.toString()}
-                                    </AccordionPanel>
-                                  </AccordionItem>
-                                </Accordion>
-                              </Box>
-                            </Stack>
-                          </>
-                        );
-                      })}
-                    </Box>
-                  </Stack>
-                </CardBody>
-              </Card>
-            </Box>
-          </>
+                                          <Heading
+                                            size="xs"
+                                            textTransform="uppercase"
+                                            className="border border-solid p-[10px] rounded-full bg-[#BDCDD6]"
+                                          >
+                                            Click to see Proof
+                                          </Heading>
+                                        </Box>
+                                        <AccordionIcon />
+                                      </AccordionButton>
+                                      <AccordionPanel pb={4}>
+                                        {file.proof.toString()}
+                                      </AccordionPanel>
+                                    </AccordionItem>
+                                  </Accordion>
+                                </Box>
+                              </Stack>
+                            </>
+                          );
+                        })}
+                      </Box>
+                    </Stack>
+                  </CardBody>
+                </Card>
+              </Box>
+            </>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
 
       {showButton && (
         <Button
           isLoading={isLoading}
-          // onClick={handleVerifyButton}
+          onClick={handleVerifyButton}
           className="border boder-solid rounded-full 
       w-[150px] h-[50px] font-bold bg-lime-200 my-[20px]"
         >

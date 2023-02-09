@@ -28,6 +28,7 @@ import {
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import QrReader from "react-qr-reader";
+import { useAccount } from "wagmi";
 
 export interface selectedRows {
   selectedKey: string;
@@ -36,36 +37,34 @@ export interface selectedRows {
 }
 
 export interface JsonFileContentType {
-  entityAddress: string;
-  address: string;
-  certName: string;
-  certHash: string;
+  hash: string;
+  patientAddress: string;
+  fileName: string;
+  hospitalAddress: string;
   selectedRows: selectedRows[];
 }
 
 export default function QrPanel() {
 
+  
+  const { address, isConnected, connector } = useAccount();
+
   const handleVerifyButton = async () => {
     setIsLoading(true);
+
     try {
       if (posts !== undefined) {
-        const flattenedResult = posts.flatMap((content1) => {
-          return content1.selectedRows.map((row) => {
-            return {
-              row_title: row.selectedKey,
-              row_content: row.selectedValue,
-              commitment: content1.certHash,
-              proof: row.proof,
-            };
-          });
-        });
-        const bulkRequest = flattenedResult.map((file) =>
+        const bulkRequest = posts.selectedRows.map((row) =>
           axios.post<{ valid: boolean }>(
             "https://medi0backendrusty.spicybuilds.xyz/verify-proof",
-            file
+            {
+              row_title: row.selectedKey,
+              row_content: row.selectedValue,
+              commitment: posts.hash,
+              proof: row.proof,
+            }
           )
         );
-
         const result = (await Promise.all(bulkRequest)).every(
           (res) => res.data.valid === true
         );
@@ -116,7 +115,7 @@ export default function QrPanel() {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const [posts, setPosts] = useState<JsonFileContentType[]>([]);
+  const [posts, setPosts] = useState<JsonFileContentType>();
 
   const fetchData = async () => {
     try {
@@ -171,152 +170,153 @@ export default function QrPanel() {
       </Modal>
 
       <div>
-        {posts ? (
-          posts.map((file) => {
-            // // print file contents
-            // file.selectedRows.map((file1) => {
-            //   // console.log(file1.selectedKey);
-            //   // console.log(file1.selectedValue);
-            //   const proofStr = file1.proof.toString().slice(0, 10) + "...";
-
-            //   console.log(`proof: ${proofStr}`);
-            // });
-            return (
-              <>
-                <Box mt="2" mb="2">
-                  <Card>
-                    <CardHeader>
-                      <Heading className="font-black text-xl">
-                        Proof Details
-                      </Heading>
-                    </CardHeader>
-                    <CardBody>
-                      <Stack divider={<StackDivider />} spacing="4">
-                        {/* <Box>
-                            <Heading
-                              size="xs"
-                              textTransform="uppercase"
-                              className="text-[#0F6292]"
-                            >
-                              Verifier Address
-                            </Heading>
-                            <Text pt="2" fontSize="sm">
-                              {address}
-                            </Text>
-                          </Box> */}
-                        <Box>
-                          <Heading
-                            size="xs"
-                            textTransform="uppercase"
-                            className="text-[#0F6292]"
-                          >
-                            Address
-                          </Heading>
-                          <Text pt="2" fontSize="sm">
-                            {file.address}
-                          </Text>
-                        </Box>
-                        <Box>
-                          <Heading
-                            size="xs"
-                            textTransform="uppercase"
-                            className="text-[#0F6292]"
-                          >
-                            Cert Name
-                          </Heading>
-                          <Text pt="2" fontSize="sm">
-                            {file.certName}
-                          </Text>
-                        </Box>
-                        <Box>
-                          <Heading
-                            size="xs"
-                            textTransform="uppercase"
-                            className="text-[#0F6292]"
-                          >
-                            Cert Hash
-                          </Heading>
-                          <Text pt="2" fontSize="sm">
-                            {file.certHash}
-                          </Text>
-                        </Box>
-                        <Box>
-                          {file.selectedRows.map((file1) => {
-                            return (
-                              <>
-                                <Stack divider={<StackDivider />} spacing="4">
-                                  <Box>
-                                    <Heading
-                                      size="xs"
-                                      textTransform="uppercase"
-                                      className="text-[#0F6292]"
-                                    >
-                                      Name
-                                    </Heading>
-                                    <Text pt="2" fontSize="sm">
-                                      {file1.selectedKey}
-                                    </Text>
-                                  </Box>
-                                  <Box>
-                                    <Heading
-                                      size="xs"
-                                      textTransform="uppercase"
-                                      className="text-[#0F6292]"
-                                    >
-                                      Value
-                                    </Heading>
-                                    <Text pt="2" fontSize="sm">
-                                      {file1.selectedValue}
-                                    </Text>
-                                  </Box>
-                                  <Box>
-                                    <Heading
-                                      size="xs"
-                                      textTransform="uppercase"
-                                      className="text-[#0F6292]"
-                                    >
-                                      Generated Proof
-                                    </Heading>
-                                    <Accordion allowToggle>
-                                      <AccordionItem borderColor={"white"}>
-                                        <AccordionButton>
-                                          <Box
-                                          // as="span"
-                                          // flex="1"
-                                          // textAlign="left"
+          {posts ? (
+            <>
+              <Box mt="2" mb="2">
+                <Card>
+                  <CardHeader>
+                    <Heading className="font-black text-xl">
+                      Proof Details
+                    </Heading>
+                  </CardHeader>
+                  <CardBody>
+                    <Stack divider={<StackDivider />} spacing="4">
+                      <Box>
+                        <Heading
+                          size="xs"
+                          textTransform="uppercase"
+                          className="text-[#0F6292]"
+                        >
+                          Verifier Address
+                        </Heading>
+                        <Text pt="2" fontSize="sm">
+                          {address}
+                        </Text>
+                      </Box>
+                      <Box>
+                        <Heading
+                          size="xs"
+                          textTransform="uppercase"
+                          className="text-[#0F6292]"
+                        >
+                          Hash
+                        </Heading>
+                        <Text pt="2" fontSize="sm">
+                          {posts?.hash}
+                        </Text>
+                      </Box>
+                      <Box>
+                        <Heading
+                          size="xs"
+                          textTransform="uppercase"
+                          className="text-[#0F6292]"
+                        >
+                          Patient Address
+                        </Heading>
+                        <Text pt="2" fontSize="sm">
+                          {posts?.patientAddress}
+                        </Text>
+                      </Box>
+                      <Box>
+                        <Heading
+                          size="xs"
+                          textTransform="uppercase"
+                          className="text-[#0F6292]"
+                        >
+                          File Name
+                        </Heading>
+                        <Text pt="2" fontSize="sm">
+                          {posts?.fileName}
+                        </Text>
+                      </Box>
+                      <Box>
+                        <Heading
+                          size="xs"
+                          textTransform="uppercase"
+                          className="text-[#0F6292]"
+                        >
+                          Hospital Address
+                        </Heading>
+                        <Text pt="2" fontSize="sm">
+                          {posts?.hospitalAddress}
+                        </Text>
+                      </Box>
+                      <Box>
+                        {posts?.selectedRows.map((file) => {
+                          return (
+                            <>
+                              <Stack divider={<StackDivider />} spacing="4">
+                                <Box>
+                                  <Heading
+                                    size="xs"
+                                    textTransform="uppercase"
+                                    className="text-[#0F6292]"
+                                  >
+                                    Selected Key
+                                  </Heading>
+                                  <Text pt="2" fontSize="sm">
+                                    {file.selectedKey}
+                                  </Text>
+                                </Box>
+                                <Box>
+                                  <Heading
+                                    size="xs"
+                                    textTransform="uppercase"
+                                    className="text-[#0F6292]"
+                                  >
+                                    Selected Value
+                                  </Heading>
+                                  <Text pt="2" fontSize="sm">
+                                    {file.selectedValue}
+                                  </Text>
+                                </Box>
+                                <Box>
+                                  <Heading
+                                    size="xs"
+                                    textTransform="uppercase"
+                                    className="text-[#0F6292]"
+                                  >
+                                    Generated Proof
+                                  </Heading>
+                                  <Accordion allowToggle>
+                                    <AccordionItem borderColor={"white"}>
+                                      <AccordionButton>
+                                        <Box
+                                        // as="span"
+                                        // flex="1"
+                                        // textAlign="left"
+                                        >
+                                          <Heading
+                                            size="xs"
+                                            textTransform="uppercase"
+                                            className="border border-solid p-[10px] rounded-full bg-[#BDCDD6]"
                                           >
-                                            <Heading
-                                              size="xs"
-                                              textTransform="uppercase"
-                                              className="border border-solid p-[10px] rounded-full bg-[#BDCDD6]"
-                                            >
-                                              Click to see Proof
-                                            </Heading>
-                                          </Box>
-                                          <AccordionIcon />
-                                        </AccordionButton>
-                                        <AccordionPanel pb={4}>
-                                          {file1.proof.toString()}
-                                        </AccordionPanel>
-                                      </AccordionItem>
-                                    </Accordion>
-                                  </Box>
-                                </Stack>
-                              </>
-                            );
-                          })}
-                        </Box>
-                      </Stack>
-                    </CardBody>
-                  </Card>
-                </Box>
-              </>
-            );
-          })
-        ) : (
-          <></>
-        )}
-      </div>
+                                            Click to see Proof
+                                          </Heading>
+                                        </Box>
+                                        <AccordionIcon />
+                                      </AccordionButton>
+                                      <AccordionPanel pb={4}>
+                                        {file.proof.toString()}
+                                      </AccordionPanel>
+                                    </AccordionItem>
+                                  </Accordion>
+                                </Box>
+                              </Stack>
+                            </>
+                          );
+                        })}
+                      </Box>
+                    </Stack>
+                  </CardBody>
+                </Card>
+              </Box>
+            </>
+          ) : (
+            <></>
+          )}
+        </div>
+   
 
       {showButton && (
         <Button
