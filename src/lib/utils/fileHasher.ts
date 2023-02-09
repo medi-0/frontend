@@ -1,22 +1,24 @@
 import axios from "axios";
 
-const SERVER_URL = "https://medi0backendrusty.spicybuilds.xyz/";
+const BASE_SERVER_URL = "https://medi0backendrusty.spicybuilds.xyz";
 
-interface GenerateCommitmentAndProofRequest {
-	rowTitles: string[];
-	rowContents: string[];
-	rowSelectors: number[];
+export interface GenerateCommitmentAndProofRequest {
+	row_titles: string[];
+	row_contents: string[];
+	row_selectors: number[];
 }
 
 export function generateDocCommitment(data: GenerateCommitmentAndProofRequest) {
-	return axios.post(SERVER_URL, data);
+	return axios.post<{
+		commitment: string;
+	}>(`${BASE_SERVER_URL}/generate-commitment`, data);
 }
 
 export function generateProof(data: GenerateCommitmentAndProofRequest) {
-	return axios.post(SERVER_URL, data);
+	return axios.post(`${BASE_SERVER_URL}/generate-proof`, data);
 }
 
-interface ProofVerificationRequest {
+export interface ProofVerificationRequest {
 	proof: number[];
 	row_title: string;
 	row_content: string;
@@ -24,5 +26,5 @@ interface ProofVerificationRequest {
 }
 
 export function verifyProof(data: ProofVerificationRequest) {
-	return axios.post(SERVER_URL, data);
+	return axios.post(`${BASE_SERVER_URL}/verify-proof`, data);
 }
