@@ -1,4 +1,4 @@
-import { Input, useMultiStyleConfig, useToast } from "@chakra-ui/react";
+import { Button, Input, useMultiStyleConfig, useToast } from "@chakra-ui/react";
 import React, { useState } from "react";
 import {
   Card,
@@ -62,12 +62,17 @@ export function UploadPanel() {
   }
 
 
+
+
+
   const handleVerifyButton = async () => {
+    setIsLoading(true);
     try {
       const res = await axios.post(
         "https://medi0backendrusty.spicybuilds.xyz/verify-proof",
+
         {
-          row_title: {file1.selectedKey},
+          row_title: "else",
           row_content: "down",
           commitment:
             "0x3baa9ebc22be9520e2bdbba6f600398801ed7f7c9415d97d5db504d4815e32db",
@@ -364,12 +369,16 @@ export function UploadPanel() {
         }
       );
       if (res.data.valid === true) {
+        setIsLoading(false);
+
         handleVerified();
       }
       else {
+        setIsLoading(false);
         handleNotVerified();
       }
     } catch (e) {
+      setIsLoading(false);
       console.log(e);
     }
   };
@@ -381,13 +390,14 @@ export function UploadPanel() {
   const { isOpen, onToggle } = useDisclosure();
 
   const styles = useMultiStyleConfig("Button", { variant: "outline" });
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [show, setShow] = React.useState(false);
   const handleToggle = () => setShow(!show);
 
   const [jsonFileContent, setJsonFileContent] =
-    React.useState<JsonFileContentType[]>();
+    React.useState<JsonFileContentType[]>([]);
 
   const uploadFile = async function (e: any) {
     setShowButton(true);
@@ -396,7 +406,7 @@ export function UploadPanel() {
       console.log(e);
       const result = e?.target?.result;
       console.log(result);
-      const jsonResult = JSON.parse(result);
+      const jsonResult: JsonFileContentType[] = JSON.parse(result);
       console.log(typeof jsonResult);
       setJsonFileContent(jsonResult);
       console.log(jsonResult);
@@ -404,26 +414,26 @@ export function UploadPanel() {
     reader.readAsText(e.target?.files[0]);
   };
 
-  const onVerifyProof = async () => {
-    setIsLoading(true);
-    if (!address || !connector) {
-      return toast({
-        title: "Unable to get address or connector",
-        description:
-          "Unable to get address or connector. Please try to reconnect.",
-        isClosable: true,
-        status: "error",
-      });
-    }
+  // const onVerifyProof = async () => {
+  //   setIsLoading(true);
+  //   if (!address || !connector) {
+  //     return toast({
+  //       title: "Unable to get address or connector",
+  //       description:
+  //         "Unable to get address or connector. Please try to reconnect.",
+  //       isClosable: true,
+  //       status: "error",
+  //     });
+  //   }
 
-    setIsLoading(false);
-    return toast({
-      title: "Invalid proof.json format",
-      description: "The provided proof.json file is in an invalid format.",
-      status: "error",
-      isClosable: true,
-    });
-  };
+  //   setIsLoading(false);
+  //   return toast({
+  //     title: "Invalid proof.json format",
+  //     description: "The provided proof.json file is in an invalid format.",
+  //     status: "error",
+  //     isClosable: true,
+  //   });
+  // };
 
   if (!isConnected)
     return (
@@ -576,14 +586,15 @@ export function UploadPanel() {
           <></>
         )}
       </div>
+      
       {showButton && (
-        <button
-          onClick={}
-          className="border boder-solid rounded-full 
-      w-[150px] h-[50px] font-bold bg-lime-200 my-[20px]"
+        <Button
+          isLoading={isLoading}
+          onClick={handleVerifyButton}
+          className=" w-[150px] h-[50px] my-[20px]"
         >
           Verify Proof
-        </button>
+        </Button>
       )}
     </div>
   );

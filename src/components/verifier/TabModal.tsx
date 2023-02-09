@@ -1,6 +1,7 @@
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
 import QrPanel from "./QrPanel";
-import { UploadPanel} from "./UploadPanel";
+import { UploadPanel } from "./UploadPanel";
+import { UploadPanelCopy } from "./UploadPanel copy";
 
 
 
@@ -15,11 +16,10 @@ export default function TabModal() {
         <TabPanels>
           <TabPanel>
             <QrPanel/>
-            
 
           </TabPanel>
           <TabPanel>
-            <UploadPanel/>
+            <UploadPanelCopy/>
 
           </TabPanel>
         </TabPanels>
