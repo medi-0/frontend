@@ -8,8 +8,6 @@ import {
 	Proof,
 } from "../../../../lib/types";
 import { useGenerateDocProofModal } from "../../PatientModalContext";
-import { generateProofForRow } from "../../../../lib/utils/fileHasher";
-import { prepareFieldsForHashing } from "../../../../lib/utils";
 import { ProofGeneration } from "./ProofGeneration";
 
 type GenerateProofModalPhase = "FIELD_SELECTION" | "PROOF_GENERATION";

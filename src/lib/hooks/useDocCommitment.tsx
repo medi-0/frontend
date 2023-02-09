@@ -39,11 +39,11 @@ export function useDocCommitment() {
 				row_contents: contents,
 			};
 
-			console.log("this is what going to be committed", body);
-
 			const {
 				data: { commitment },
 			} = await generateDocCommitment(body);
+
+			console.log("this is what going to be committed", body, commitment);
 
 			const tx = await contract.commitPatientFileHashAndPatientData(
 				doc.patientAddress as `0x${string}`,

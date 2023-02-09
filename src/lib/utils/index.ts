@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Configuration, OpenAIApi } from "openai";
+import { CIDString } from "web3.storage";
 
 export async function processText(text: string): Promise<{
 	respText: string;
@@ -137,4 +138,8 @@ export async function digestMessage(message: string) {
 	const encoder = new TextEncoder();
 	const data = encoder.encode(message);
 	return bufferToHex(data);
+}
+
+export function generateIpfsLink(cid: CIDString) {
+	return `https://${cid}.ipfs.w3s.link/`;
 }

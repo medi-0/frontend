@@ -108,13 +108,17 @@ function DocDisplayModal({ doc }: DocDisplayModalProps) {
 							className="flex flex-col flex-1 gap-1.5 overflow-scroll h-full"
 							key={doc.fields.length}
 						>
-							{doc.fields.map((e, idx) => (
-								<StaticDocField
-									entryKey={e.key}
-									entryValue={e.value}
-									key={`${e.key}-${e.value}-${idx}`}
-								/>
-							))}
+							{doc.fields.map((e, idx) => {
+								if (e.key === "-" && e.value === "-") return <></>;
+								else
+									return (
+										<StaticDocField
+											entryKey={e.key}
+											entryValue={e.value}
+											key={`${e.key}-${e.value}-${idx}`}
+										/>
+									);
+							})}
 						</div>
 					) : (
 						<div>no fields</div>

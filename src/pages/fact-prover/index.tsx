@@ -67,7 +67,7 @@ function PatientView() {
 				<div className="px-2.5 border rounded bg-neutral-100">
 					Total docs :{" "}
 					<span id="list-counter" ref={counterRef}>
-						3
+						2
 					</span>
 				</div>
 			</div>
