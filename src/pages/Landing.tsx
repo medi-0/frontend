@@ -6,30 +6,12 @@ import Navbar from "../components/navbar/Navbar";
 import { useUser } from "../providers/UserProvider";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import RegistrationModal from "../components/RegistrationModal/Registration";
-import Lottie from "react-lottie";
-import animationData from "../lib/assets/document.json"
 import img1 from "../lib/assets/picture/zk.png";
 import img2 from "../lib/assets/picture/matic.png";
 import img3 from "../lib/assets/picture/ipfs.png";
-
-
-
-// 1. if it is connected
-// 2. read from the contract
-// 3. if the address is not registered open the registration Modal
-// 4. if the address is registered as a Hospital, navigate to the hospital page
-// 5. if the address is registered as a Patient, navigate to the patient page
+import img4 from "../lib/assets/picture/eth.png";
 
 export default function Landing() {
-  const defaultOptions = {
-    loop: true,
-    autoplay: true,
-    animationData: animationData,
-    // rendererSettings: {
-    // preserveAspectRatio: "xMidYMid slice"
-    // }
-  };
-
   const navigate = useNavigate();
 
   const {
@@ -51,8 +33,7 @@ export default function Landing() {
 
   return (
     <div
-      className="h-screen flex flex-col" 
-			// bg-[url('../public/blueSky.jpg')] bg-no-repeat bg-cover bg-center bg-fixed
+      className="h-screen flex flex-col"
       style={{
         minHeight: "670px",
       }}
@@ -72,9 +53,9 @@ export default function Landing() {
           </h1>
           <br />
           <h1 className="text-[#81AFDD] font-bold text-lg">
-            Share the information that you want safely<br />
+            Share the information that you want safely
+            <br />
             Powered by zkdoc
-            
           </h1>
 
           <Button
@@ -88,15 +69,36 @@ export default function Landing() {
         </div>
 
         <div className="h-[500px]">
-          <Lottie options={defaultOptions} />
+          <img
+            className="mb-[100px] px-[30px]"
+            src={img4}
+            alt=""
+            width={700}
+            height={700}
+          />
         </div>
       </div>
 
       <div className="flex justify-center">
         <ul className="flex items-center">
-          <li><img className="mb-[100px] px-[30px]" src={img1} alt=""  width={200} height={100} /></li>
-          <li><img className="mb-[100px] px-[30px]" src={img2} alt=""  width={200} height={100} /></li>
-          <li><img className="mb-[100px] px-[30px]" src={img3} alt=""  width={200} height={100} /></li>
+          <li>
+            <img
+              className="mb-[100px] px-[30px]"
+              src={img1}
+              alt=""
+              width={200}
+              height={100}
+            />
+          </li>
+          <li>
+            <img
+              className="mb-[100px] px-[30px]"
+              src={img3}
+              alt=""
+              width={200}
+              height={100}
+            />
+          </li>
         </ul>
       </div>
     </div>

@@ -1,7 +1,6 @@
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
 import QrPanel from "./QrPanel";
 import { UploadPanel } from "./UploadPanel";
-import { VTest1 } from "./VTest1";
 
 
 
@@ -19,7 +18,7 @@ export default function TabModal() {
 
           </TabPanel>
           <TabPanel>
-            <VTest1/>
+            <UploadPanel/>
 
           </TabPanel>
         </TabPanels>
