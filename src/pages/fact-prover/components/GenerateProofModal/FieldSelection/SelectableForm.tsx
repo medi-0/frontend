@@ -129,8 +129,8 @@ export default function SelectableForm({ doc, onSubmit }: SelectableFormProps) {
 					isDisabled={selected.length === 0 ? true : false}
 					borderRadius="3xl"
 					paddingX="14"
-					className=""
-					colorScheme="blue"
+					className="font-sans font-bold uppercase"
+					colorScheme="pink"
 					mr={3}
 					// onClick={mainModal.onClose}
 					onClick={() => {

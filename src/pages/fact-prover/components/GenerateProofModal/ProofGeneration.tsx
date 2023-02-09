@@ -111,8 +111,12 @@ export function ProofGeneration({ preparedDoc }: ProofGenerationProps) {
 		}
 	}, [preparedDoc, cid]);
 
+	const [qrIsLoading, setQrIsLoading] = useState(false);
+
 	const onGenerateQrClick = useCallback(async () => {
 		if (!preparedDoc || !cid || !pdfLink) return;
+
+		setQrIsLoading(true);
 
 		try {
 			const qrId = await digestMessage(
@@ -132,6 +136,8 @@ export function ProofGeneration({ preparedDoc }: ProofGenerationProps) {
 			qrDownloadRef.current.setAttribute("download", qrName);
 			qrDownloadRef.current.click();
 		} catch (e) {}
+
+		setQrIsLoading(false);
 	}, [preparedDoc, cid, pdfLink]);
 
 	return (
@@ -168,7 +174,7 @@ export function ProofGeneration({ preparedDoc }: ProofGenerationProps) {
 				) : cid ? (
 					<div className="flex flex-col h-full">
 						<div className="flex flex-1 flex-col items-center justify-center">
-							<div className="font-semibold mb-2">
+							<div className="font-sans font-semibold mb-2">
 								Proof successfully generated and uploaded to IPFS.
 							</div>
 							<div className="">
@@ -216,10 +222,13 @@ export function ProofGeneration({ preparedDoc }: ProofGenerationProps) {
 							<Button
 								className="flex-1 font-sans"
 								rounded="full"
-								isDisabled={pdfLink ? false : true}
+								isDisabled={pdfLink && !qrIsLoading ? false : true}
 								onClick={onGenerateQrClick}
 							>
 								Generate QR code for proof
+								{qrIsLoading ? (
+									<Spinner size="xs" marginLeft="0.8rem" />
+								) : null}
 							</Button>
 
 							<a target="_blank" ref={pdfDownloadRef} hidden download></a>
