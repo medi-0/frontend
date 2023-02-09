@@ -60,7 +60,7 @@ function RegistrationModal() {
 		contract?.registerAsHospital(name, description).then((tx) => {
 			setTx(tx);
 		});
-
+	
 		// navigate("/Hospital");
 		// onSecondClose();
 	};
@@ -68,6 +68,7 @@ function RegistrationModal() {
 	const handlePatient = () => {
 		contract?.registerAsPatient().then((tx) => {
 			setTx(tx);
+
 		});
 
 		// navigate("/Patient");
@@ -84,33 +85,34 @@ function RegistrationModal() {
 
 	useEffect(() => {
 		console.log("tx completed1", data);
+
 		// contract?.hasRole()
 
-		if (!contract || !address) return;
+		// if (!contract || !address) return;
 
-		Promise.all([
-			contract.hasRole(
-				// keccak(HOSPITAL_ROLE)
-				"0xc8f5b4140cca307cd927e59cbeea8291bffeee228fc677f0fa059aef7b4dd8d5",
-				address
-			),
-			contract.hasRole(
-				// keccak(PATIENT_ROLE)
-				"0x72606200fac42b7dc86b75901d61ecfab2a4a1a6eded478b97a428094891abed",
-				address
-			),
-		]).then(([isHospital, isPatient]) => {
-			console.log("double", isHospital, isPatient);
+		// Promise.all([
+		// 	contract.hasRole(
+		// 		// keccak(HOSPITAL_ROLE)
+		// 		"0xc8f5b4140cca307cd927e59cbeea8291bffeee228fc677f0fa059aef7b4dd8d5",
+		// 		address
+		// 	),
+		// 	contract.hasRole(
+		// 		// keccak(PATIENT_ROLE)
+		// 		"0x72606200fac42b7dc86b75901d61ecfab2a4a1a6eded478b97a428094891abed",
+		// 		address
+		// 	),
+		// ]).then(([isHospital, isPatient]) => {
+		// 	console.log("double", isHospital, isPatient);
 
-			if (isHospital) {
-				navigate("/Hospital");
-				console.log("tx completed2", data);
-			} else if (isPatient) {
-				navigate("/Patient");
-				console.log("tx completed2", data);
-			} else {
-			}
-		});
+		// 	if (isHospital) {
+		// 		navigate("/App");
+		// 		console.log("tx completed2", data);
+		// 	} else if (isPatient) {
+		// 		navigate("/App");
+		// 		console.log("tx completed2", data);
+		// 	} else {
+		// 	}
+		// });
 	}, [data]);
 
 	return (

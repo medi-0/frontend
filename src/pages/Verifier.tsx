@@ -27,12 +27,10 @@ export default function Verifier() {
     <div>
       <Navbar />
       <div className="m-10">
-        <h1 className="mx-10 text-4xl font-bold text-[#3C84AB] ">
+        <h1 className="pb-[50px]  mx-10 text-4xl font-bold text-[#3C84AB] ">
           Verify Proof
         </h1>
-        <hr className="mt-2 mb-10" />
         <TabModal/>
-        
       </div>
     </div>
   );
