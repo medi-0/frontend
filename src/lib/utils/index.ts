@@ -101,8 +101,8 @@ export function prepareFieldsForHashing(fields: Field[]) {
 		let currentValue = "-";
 
 		if (fields[i]) {
-			currentKey = fields[i].value;
-			currentValue = fields[i].key;
+			currentKey = fields[i].key;
+			currentValue = fields[i].value;
 		}
 
 		keys.push(currentKey);
