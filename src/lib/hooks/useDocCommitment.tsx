@@ -26,7 +26,7 @@ export function useDocCommitment() {
 		if (!contract) return;
 
 		try {
-			const cid = await ipfs.upload(doc);
+			const cid = await ipfs.upload(doc, `medi0-artifact-${doc.fileName}`);
 
 			const [titles, contents] = prepareFieldsForHashing(doc.fields);
 			const row_selectors = titles.map(() => 0);
