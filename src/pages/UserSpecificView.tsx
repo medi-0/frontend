@@ -15,18 +15,16 @@ export default function UserSpecificView() {
 			className="px-10 pt-5 pb-10 font-san h-screen grid gap-6"
 		>
 			<MenuBar />
-			<div className="overflow-clip h-full">
-				{type === UserRole.HOSPITAL_ROLE ? (
-					<div className="w-full h-full p-4 pt-3 rounded-lg border-2 border-[#432366] overflow-clip relative">
+			<div className="h-full">
+				<div className="w-full h-full min-h-[300px] p-4 pt-3 rounded-lg border-2 border-[#432366] overflow-clip relative">
+					{type === UserRole.HOSPITAL_ROLE ? (
 						<HospitalView />
-					</div>
-				) : type === UserRole.PATIENT_ROLE ? (
-					<div className="w-full h-full p-4 pt-3 rounded-lg border-2 border-[#432366] overflow-clip relative">
+					) : type === UserRole.PATIENT_ROLE ? (
 						<PatientView />
-					</div>
-				) : (
-					<div>you are not registered bruh?</div>
-				)}
+					) : (
+						<div>you are not registered bruh?</div>
+					)}
+				</div>
 			</div>
 		</div>
 	);

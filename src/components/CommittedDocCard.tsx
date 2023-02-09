@@ -13,7 +13,7 @@ function CommittedDocCard({ data, onClick }: Props) {
 
 	return (
 		<div
-			className="group/doccard flex justify-between items-center cursor-pointer border border-zinc-400 px-4 py-1.5 rounded-md text-sm hover:bg-zinc-100 transition-colors ease-in-out duration-150"
+			className="group/doccard flex justify-between items-center cursor-pointer border border-zinc-400 px-4 py-1.5 rounded-md text-sm  hover:shadow-md transition-shadow ease-in-out duration-150"
 			onClick={onClick}
 		>
 			<div>

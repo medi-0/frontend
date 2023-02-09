@@ -12,6 +12,7 @@ import {
 	useDocDisplayModal,
 } from "./providers/DocDisplayModalProvider";
 import DocDisplayModal from "./components/DocDisplayModal";
+import { Badge } from "@chakra-ui/react";
 
 function DocProvisionerView() {
 	const { onOpen } = useDocDisplayModal();
@@ -57,16 +58,44 @@ function DocProvisionerView() {
 	return (
 		<>
 			<div
-				className="mb-3 font-semibold flex"
+				className="mb-3 font-semibold flex justify-between"
 				style={{
 					fontSize: "0.85rem",
 				}}
 			>
-				<div className="px-2.5 border rounded bg-neutral-100">
+				<Badge
+					paddingX="0.4rem"
+					paddingY="0.2rem"
+					variant="subtle"
+					rounded="md"
+					colorScheme="pink"
+				>
 					Total docs :{" "}
 					<span id="list-counter" ref={counterRef}>
 						0
 					</span>
+				</Badge>
+				<div className="flex gap-2">
+					<Badge
+						paddingX="0.7rem"
+						paddingY="0.2rem"
+						variant="subtle"
+						rounded="md"
+						colorScheme="gray"
+						cursor="pointer"
+					>
+						Sort
+					</Badge>
+					<Badge
+						paddingX="0.7rem"
+						paddingY="0.2rem"
+						variant="subtle"
+						rounded="md"
+						colorScheme="gray"
+						cursor="pointer"
+					>
+						Filter
+					</Badge>
 				</div>
 			</div>
 

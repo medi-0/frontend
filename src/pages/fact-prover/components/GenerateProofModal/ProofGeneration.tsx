@@ -225,10 +225,14 @@ export function ProofGeneration({ preparedDoc }: ProofGenerationProps) {
 								isDisabled={pdfLink && !qrIsLoading ? false : true}
 								onClick={onGenerateQrClick}
 							>
-								Generate QR code for proof
 								{qrIsLoading ? (
-									<Spinner size="xs" marginLeft="0.8rem" />
-								) : null}
+									<>
+										Generating...
+										<Spinner size="xs" marginLeft="0.8rem" />
+									</>
+								) : (
+									<>Generate QR code for proof</>
+								)}
 							</Button>
 
 							<a target="_blank" ref={pdfDownloadRef} hidden download></a>

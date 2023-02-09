@@ -35,7 +35,7 @@ function FileUploadInput({ onDrop }: FileUploadInputProps) {
 							? "inset 0 2px 8px 0 #aaaaaac8"
 							: undefined,
 					}}
-					className={`group/fileinput relative flex-1 border border-neutral-400 rounded-md flex items-center justify-center cursor-pointer hover:bg-neutral-100 transition-colors ease-in-out duration-200`}
+					className={`group/fileinput relative flex-1 border border-neutral-400 rounded-xl flex items-center justify-center cursor-pointer hover:bg-neutral-100 transition-colors ease-in-out duration-200 font-sans`}
 				>
 					<input {...getInputProps()} className="hidden" />
 					<div className="absolute inset-0  group-hover/fileinput:text-zinc-500 text-zinc-400 transition-colors ease-in-out duration-200 h-full flex flex-col items-center justify-center">
@@ -97,7 +97,7 @@ export default function PdfUploadForm({ onSubmit }: PdfUploadProps) {
 
 	return (
 		<>
-			<ModalBody className="flex h-72" minH="300px" padding="0.7rem 0 0 0">
+			<ModalBody className="flex h-72" minH="200px" padding="0.7rem 0 0 0">
 				{isLoading ? (
 					<div className="flex-1 flex items-center justify-center">
 						<Spinner />
