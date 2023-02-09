@@ -109,7 +109,7 @@ export default function SelectableForm({ doc, onSubmit }: SelectableFormProps) {
 						key={fields.length}
 					>
 						{fields.map((e, idx) => {
-							if (e.key && e.value)
+							if (e.key !== "-" && e.value !== "-")
 								return (
 									<SelectableFormInput
 										fieldKey={e.key}

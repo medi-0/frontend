@@ -47,3 +47,24 @@ export interface CommittedMedicalDocumentHeader {
 
 export type FullCommittedDocumentData = Omit<DocWithCID, "cid"> &
 	Omit<CommittedMedicalDocumentHeader, "fileName" | "hospital" | "patient">;
+
+export interface PreparedDocForProving extends FullCommittedDocumentData {
+	selectedRows: boolean[];
+}
+
+export type DocInclusionProof = Omit<Doc, "fields" | "hospitalName"> &
+	Pick<FullCommittedDocumentData, "hash"> & {
+		selectedRows: SelectedRowWithProof[];
+	};
+
+// export interface DocFieldsInclusionProof extends PreparedDocForProving {
+// 	proof: Proof;
+// }
+
+export interface SelectedRowWithProof {
+	selectedKey: string;
+	selectedValue: string;
+	proof: Proof;
+}
+
+export type Proof = number[];

@@ -1,6 +1,7 @@
 import axios from "axios";
+import { SelectedRowWithProof } from "../types";
 
-const BASE_SERVER_URL = "https://medi0backendrusty.spicybuilds.xyz";
+const PROOF_BASE_SERVER_URL = "https://medi0backendrusty.spicybuilds.xyz";
 
 export interface GenerateCommitmentAndProofRequest {
 	row_titles: string[];
@@ -11,11 +12,14 @@ export interface GenerateCommitmentAndProofRequest {
 export function generateDocCommitment(data: GenerateCommitmentAndProofRequest) {
 	return axios.post<{
 		commitment: string;
-	}>(`${BASE_SERVER_URL}/generate-commitment`, data);
+	}>(`${PROOF_BASE_SERVER_URL}/generate-commitment`, data);
 }
 
-export function generateProof(data: GenerateCommitmentAndProofRequest) {
-	return axios.post(`${BASE_SERVER_URL}/generate-proof`, data);
+export function generateProofForRow(data: GenerateCommitmentAndProofRequest) {
+	return axios.post<{ proof: number[] }>(
+		`${PROOF_BASE_SERVER_URL}/generate-proof`,
+		data
+	);
 }
 
 export interface ProofVerificationRequest {
@@ -26,5 +30,40 @@ export interface ProofVerificationRequest {
 }
 
 export function verifyProof(data: ProofVerificationRequest) {
-	return axios.post(`${BASE_SERVER_URL}/verify-proof`, data);
+	return axios.post(`${PROOF_BASE_SERVER_URL}/verify-proof`, data);
+}
+
+export async function generateInclusionProofForSelectedFields(
+	rowTitles: string[],
+	rowContents: string[],
+	selectedRows: boolean[]
+) {
+	const selectedRowProof: SelectedRowWithProof[] = [];
+
+	for (let i = 0; i < selectedRows.length; i++) {
+		if (!selectedRows[i]) continue;
+
+		const selected = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+		selected[i] = 1;
+
+		try {
+			const {
+				data: { proof },
+			} = await generateProofForRow({
+				row_titles: rowTitles,
+				row_contents: rowContents,
+				row_selectors: selected,
+			});
+
+			selectedRowProof.push({
+				selectedKey: rowTitles[i],
+				selectedValue: rowContents[i],
+				proof,
+			});
+		} catch (e) {
+			throw e;
+		}
+	}
+
+	return selectedRowProof;
 }

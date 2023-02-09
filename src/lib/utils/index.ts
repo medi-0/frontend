@@ -96,10 +96,45 @@ export function prepareFieldsForHashing(fields: Field[]) {
 	const keys = [];
 	const values = [];
 
-	for (let i = 0; i < fields.length; i++) {
-		keys.push(fields[i].key);
-		values.push(fields[i].value);
+	for (let i = 0; i < 10; i++) {
+		let currentKey = "-";
+		let currentValue = "-";
+
+		if (fields[i]) {
+			currentKey = fields[i].value;
+			currentValue = fields[i].key;
+		}
+
+		keys.push(currentKey);
+		values.push(currentValue);
 	}
 
 	return [keys, values];
+}
+
+export function extractFieldsFromSelected(fields: Field[], selected: boolean[]) {
+	const selectedFields = [];
+	for (let i = 0; i < fields.length; i++) {
+		if (selected[i]) selectedFields.push(fields[i]);
+	}
+	return selectedFields;
+}
+
+export function convertBoolToNumberArray(arr: boolean[]) {
+	return arr.map((i) => (i ? 1 : 0));
+}
+
+export function bufferToHex(buffer: ArrayBuffer) {
+	var s = "",
+		h = "0123456789ABCDEF";
+	new Uint8Array(buffer).forEach((v) => {
+		s += h[v >> 4] + h[v & 15];
+	});
+	return s;
+}
+
+export async function digestMessage(message: string) {
+	const encoder = new TextEncoder();
+	const data = encoder.encode(message);
+	return bufferToHex(data);
 }
