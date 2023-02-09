@@ -9,7 +9,8 @@ import RegistrationModal from "../components/RegistrationModal/Registration";
 import img1 from "../lib/assets/picture/zk.png";
 import img2 from "../lib/assets/picture/matic.png";
 import img3 from "../lib/assets/picture/ipfs.png";
-import img4 from "../lib/assets/picture/eth.png";
+import img4 from "../lib/assets/picture/Quick.png";
+import imgeth from "../lib/assets/picture/eth.png";
 
 export default function Landing() {
   const navigate = useNavigate();
@@ -71,7 +72,7 @@ export default function Landing() {
         <div className="h-[500px]">
           <img
             className="mb-[100px] px-[30px]"
-            src={img4}
+            src={imgeth}
             alt=""
             width={700}
             height={700}
@@ -79,12 +80,23 @@ export default function Landing() {
         </div>
       </div>
 
+      <h1 className = "text-center font-bold text-[#BDCDD6]">Powered by</h1>
+
       <div className="flex justify-center">
         <ul className="flex items-center">
           <li>
             <img
-              className="mb-[100px] px-[30px]"
+              className="mb-[70px] px-[35px]"
               src={img1}
+              alt=""
+              width={150}
+              height={100}
+            />
+          </li>
+          <li>
+            <img
+              className="mb-[70px] px-[35px]"
+              src={img2}
               alt=""
               width={200}
               height={100}
@@ -92,8 +104,17 @@ export default function Landing() {
           </li>
           <li>
             <img
-              className="mb-[100px] px-[30px]"
+              className="mb-[70px] px-[35px]"
               src={img3}
+              alt=""
+              width={170}
+              height={100}
+            />
+          </li>
+          <li>
+            <img
+              className="mb-[70px] px-[35px]"
+              src={img4}
               alt=""
               width={200}
               height={100}
