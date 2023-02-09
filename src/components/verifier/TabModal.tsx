@@ -1,7 +1,7 @@
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
 import QrPanel from "./QrPanel";
 import { UploadPanel } from "./UploadPanel";
-import { UploadPanelCopy } from "./UploadPanel copy";
+import { VTest1 } from "./VTest1";
 
 
 
@@ -10,8 +10,8 @@ export default function TabModal() {
     <div>
       <Tabs isLazy>
         <TabList>
-          <Tab>Scan Qr Code</Tab>
-          <Tab>Upload FIle</Tab>
+          <Tab className="font-bold">Scan Qr Code</Tab>
+          <Tab className="font-bold">Upload FIle</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>
@@ -19,7 +19,7 @@ export default function TabModal() {
 
           </TabPanel>
           <TabPanel>
-            <UploadPanelCopy/>
+            <VTest1/>
 
           </TabPanel>
         </TabPanels>

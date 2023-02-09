@@ -1,4 +1,4 @@
-import { Input, useMultiStyleConfig, useToast } from "@chakra-ui/react";
+import { Button, Input, useMultiStyleConfig, useToast } from "@chakra-ui/react";
 import React, { useState } from "react";
 import {
   Card,
@@ -40,7 +40,7 @@ export interface JsonFileContentType {
 
 
 
-export function UploadPanelCopy() {
+export function VTest1() {
 
   const handleVerified = () => {
     toast({
@@ -64,26 +64,39 @@ export function UploadPanelCopy() {
 
 
   const handleVerifyButton = async () => {
+    setIsLoading(true);
     try {
       if (jsonFileContent !== undefined) {
-        const bulkRequest = jsonFileContent.map((file) =>
+        const flattenedResult = jsonFileContent.flatMap((content1) => {
+          return content1.selectedRows.map((row) => {
+            return {
+              row_title: row.selectedKey,
+              row_content: row.selectedValue,
+              commitment: content1.certHash,
+              proof: row.proof
+            }
+          })
+        })
+        const bulkRequest = flattenedResult.map((file) =>
 
           axios.post<{ valid: boolean }>(
             "https://medi0backendrusty.spicybuilds.xyz/verify-proof",
-            {
-              ...file,
-            }
-          )
+            file
+          )    
+
         );
+
         const result = (await Promise.all(bulkRequest)).every(
           (res) => res.data.valid === true
       
         );
 
         if (result === true) {
+          setIsLoading(false);
           handleVerified();
          
         } else {
+          setIsLoading(false);
           handleNotVerified();
         }
       }
@@ -171,25 +184,25 @@ export function UploadPanelCopy() {
 
         {jsonFileContent ? (
           jsonFileContent.map((file) => {
-            // print file contents
-            file.selectedRows.map((file1) => {
-              // console.log(file1.selectedKey);
-              // console.log(file1.selectedValue);
-              const proofStr = file1.proof.toString().slice(0, 10) + "...";
+            // // print file contents
+            // file.selectedRows.map((file1) => {
+            //   // console.log(file1.selectedKey);
+            //   // console.log(file1.selectedValue);
+            //   const proofStr = file1.proof.toString().slice(0, 10) + "...";
 
-              console.log(`proof: ${proofStr}`);
-            });
+            //   console.log(`proof: ${proofStr}`);
+            // });
             return (
               <>
                 <Box mt="2" mb="2">
                   <Card>
                     <CardHeader>
-                      <Heading size="md">Proof</Heading>
+                    <Heading className="font-black text-xl">Proof Details</Heading>
                     </CardHeader>
                     <CardBody>
                       <Stack divider={<StackDivider />} spacing="4">
                         <Box>
-                          <Heading size="xs" textTransform="uppercase">
+                          <Heading size="xs" textTransform="uppercase" className="text-[#0F6292]">
                             Verifier Address
                           </Heading>
                           <Text pt="2" fontSize="sm">
@@ -197,7 +210,7 @@ export function UploadPanelCopy() {
                           </Text>
                         </Box>
                         <Box>
-                          <Heading size="xs" textTransform="uppercase">
+                          <Heading size="xs" textTransform="uppercase" className="text-[#0F6292]">
                             Address
                           </Heading>
                           <Text pt="2" fontSize="sm">
@@ -205,7 +218,7 @@ export function UploadPanelCopy() {
                           </Text>
                         </Box>
                         <Box>
-                          <Heading size="xs" textTransform="uppercase">
+                          <Heading size="xs" textTransform="uppercase" className="text-[#0F6292]">
                             Cert Name
                           </Heading>
                           <Text pt="2" fontSize="sm">
@@ -213,7 +226,7 @@ export function UploadPanelCopy() {
                           </Text>
                         </Box>
                         <Box>
-                          <Heading size="xs" textTransform="uppercase">
+                          <Heading size="xs" textTransform="uppercase" className="text-[#0F6292]">
                             Cert Hash
                           </Heading>
                           <Text pt="2" fontSize="sm">
@@ -229,6 +242,7 @@ export function UploadPanelCopy() {
                                     <Heading
                                       size="xs"
                                       textTransform="uppercase"
+                                      className="text-[#0F6292]"
                                     >
                                       Name
                                     </Heading>
@@ -240,6 +254,7 @@ export function UploadPanelCopy() {
                                     <Heading
                                       size="xs"
                                       textTransform="uppercase"
+                                      className="text-[#0F6292]"
                                     >
                                       Value
                                     </Heading>
@@ -251,6 +266,7 @@ export function UploadPanelCopy() {
                                     <Heading
                                       size="xs"
                                       textTransform="uppercase"
+                                      className="text-[#0F6292]"
                                     >
                                       Generated Proof
                                     </Heading>
@@ -296,13 +312,14 @@ export function UploadPanelCopy() {
       </div>
 
       {showButton && (
-        <button
+        <Button
+          isLoading={isLoading}
           onClick={handleVerifyButton}
           className="border boder-solid rounded-full 
       w-[150px] h-[50px] font-bold bg-lime-200 my-[20px]"
         >
           Verify Proof
-        </button>
+        </Button>
       )}
     </div>
   );

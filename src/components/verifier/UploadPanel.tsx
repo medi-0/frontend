@@ -62,9 +62,6 @@ export function UploadPanel() {
   }
 
 
-
-
-
   const handleVerifyButton = async () => {
     setIsLoading(true);
     try {
@@ -364,7 +361,7 @@ export function UploadPanel() {
             3, 2, 45, 52, 21, 170, 99, 150, 150, 180, 232, 253, 197, 241, 224,
             233, 10, 129, 255, 2, 73, 168, 51, 121, 65, 251, 182, 239, 134, 7,
             109, 44, 145, 140, 251, 221, 70, 49, 147, 73, 132, 200, 8, 242, 96,
-            192, 103, 82, 14,
+            192, 103, 82, 14
           ],
         }
       );
@@ -464,13 +461,14 @@ export function UploadPanel() {
         {jsonFileContent ? (
           jsonFileContent.map((file) => {
             // print file contents
-            file.selectedRows.map((file1) => {
-              // console.log(file1.selectedKey);
-              // console.log(file1.selectedValue);
-              const proofStr = file1.proof.toString().slice(0, 10) + "...";
+            // file.selectedRows.map((file1) => {
 
-              console.log(`proof: ${proofStr}`);
-            });
+            //   // console.log(file1.selectedKey);
+            //   // console.log(file1.selectedValue);
+
+            //   const proofStr = file1.proof.toString().slice(0, 10) + "...";
+            //   console.log(`proof: ${proofStr}`);
+            // });
             return (
               <>
                 <Box mt="2" mb="2">

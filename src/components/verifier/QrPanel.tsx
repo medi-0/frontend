@@ -29,12 +29,26 @@ export default function QrPanel() {
 
   const [posts, setPosts] = useState<any[]>([]);
 
-  const fetchData = async () => {
-    const { data } = await axios.get(`https://${result}.ipfs.w3s.link/`);
 
+
+
+
+  const fetchData = async () => {
+    try{
+    const { data } = await axios.get(result);
     setPosts(data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
+
+
+
+
+
+
+  
   const [result, setResult] = useState("No result");
 
   let handleScan = (data: React.SetStateAction<any>) => {
@@ -54,7 +68,7 @@ export default function QrPanel() {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
+          <ModalHeader>Scan QR Code</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <div className="flex justify-center items-center">
@@ -66,7 +80,7 @@ export default function QrPanel() {
                   style={{ width: "100%" }}
                   facingMode="environment"
                 />
-                <p>IPFS id = {result}</p>
+                <p>{result}</p>
               </div>
             </div>
           </ModalBody>
@@ -79,10 +93,9 @@ export default function QrPanel() {
       </Modal>
       <div>
         {posts.map((post) => (
-          <div key={post.id}>
-            <h5 className="text-center font-bold">{post.title}</h5>
-            <p className="text-center">{post.body}</p>
-            <br />
+          <div className="text-center">
+            <p className="font-black">{post.title}</p>
+            <p>{post.body}</p>    
           </div>
         ))}
       </div>
